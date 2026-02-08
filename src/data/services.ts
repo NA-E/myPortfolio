@@ -2,21 +2,27 @@ import { Service } from '../types';
 
 export const services: Service[] = [
   {
+    id: 0,
+    title: 'CUSTOM SOFTWARE DEVELOPMENT',
+    description: 'I build production-grade web applications and internal tools from scratch using modern tech stacks. Whether you need a custom dashboard, a data management system, or a specialized business tool, I combine software engineering best practices with AI capabilities to deliver robust, scalable solutions.',
+    icon: 'Monitor',
+  },
+  {
     id: 1,
-    title: 'PROCESS AUTOMATION',
-    description: 'Transform manual processes into efficient automated workflows. I design and implement automation solutions that reduce human error, increase efficiency, and free up valuable resources.',
+    title: 'AI‑DRIVEN PROCESS AUTOMATION',
+    description: 'I design intelligent automation that goes beyond simple triggers and scripts. Using LLMs, orchestration tools, and custom logic, I build processes that handle edge cases, adapt to real data, and stay maintainable as your needs change.',
     icon: 'Settings',
   },
   {
     id: 2,
-    title: 'WORKFLOW DEVELOPMENT',
-    description: 'Create custom N8N workflows tailored to your business needs. From simple task automation to complex multi-step processes, I build reliable workflows that streamline operations.',
+    title: 'CUSTOM AI WORKFLOWS & TOOLS',
+    description: 'Many of my clients come to me after an AI or no‑code experiment became too fragile to maintain. I review what you already have, clarify the requirements, and redesign your workflows and internal tools so they are stable, testable, and easier to extend.',
     icon: 'GitBranch',
   },
   {
     id: 3,
-    title: 'INTEGRATION SOLUTIONS',
-    description: 'Connect and synchronize your business applications. I specialize in building reliable integrations between various systems, ensuring seamless data flow across your organization.',
+    title: 'INTEGRATIONS & DATA PIPELINES',
+    description: 'I connect your systems and build data pipelines that power AI‑driven applications — from CRM syncs and ETL processes to real‑time feeds for LLM‑based tools. Reliable data flow, built with proper error handling and monitoring.',
     icon: 'Link',
   },
 ];

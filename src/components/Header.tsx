@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/' + href);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        const headerHeight = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+    }
+  };
 
   const menuVariants = {
     closed: { 
@@ -51,7 +69,7 @@ const Header: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
-        <a href="#home" className="font-pixel text-sm md:text-base">
+        <a href="#home" className="font-pixel text-sm md:text-base" onClick={(e) => handleNavClick(e, '#home')}>
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -77,6 +95,7 @@ const Header: React.FC = () => {
               <motion.a
                 key={link.name}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="font-medium text-sm hover:text-accent-primary transition-colors hover-link"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -107,11 +126,14 @@ const Header: React.FC = () => {
       >
         <div className="flex flex-col space-y-6">
           {links.map((link) => (
-            <a 
+            <a
               key={link.name}
               href={link.href}
               className="font-medium text-lg hover:text-accent-primary transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => {
+                handleNavClick(e, link.href);
+                setIsOpen(false);
+              }}
             >
               {link.name}
             </a>

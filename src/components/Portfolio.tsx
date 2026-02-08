@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import { projects } from '../data/projects';
-import { ExternalLink } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Tilt } from 'react-tilt';
 
 const Portfolio: React.FC = () => {
@@ -70,7 +71,7 @@ const Portfolio: React.FC = () => {
             SELECTED WORK
           </h2>
           <p className="text-text-secondary max-w-2xl mx-auto">
-            Explore my portfolio of automation projects that have transformed business processes and workflows.
+            AI‑powered tools and workflows I've built for clients — from custom internal apps to production data pipelines, all built to be reliable and maintainable, not just prototypes.
           </p>
         </motion.div>
         
@@ -87,42 +88,38 @@ const Portfolio: React.FC = () => {
               className="flex flex-col h-full"
             >
               <Tilt options={defaultTiltOptions}>
-                <div className="group bg-dark-surface rounded-lg overflow-hidden hover-card border border-accent-primary/10 hover:border-accent-primary/30 tilt-card h-full">
+                <div className="group relative bg-dark-surface rounded-lg overflow-hidden hover-card border border-accent-primary/10 hover:border-accent-primary/30 hover:shadow-lg hover:shadow-accent-primary/10 tilt-card h-full transition-all duration-300">
                   <div className="relative h-48 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark-surface via-transparent to-transparent z-10"></div>
-                    <div className="absolute inset-0 bg-accent-primary/10 mix-blend-overlay z-10"></div>
-                    <motion.img 
-                      src={project.image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      whileHover={{ scale: 1.1 }}
+                    <div className="absolute inset-0 bg-gradient-to-t from-dark-surface/60 via-transparent to-transparent z-10 pointer-events-none"></div>
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                     />
                   </div>
-                  
+
                   <div className="p-6 flex flex-col flex-grow">
                     <div className="mb-4">
                       <span className="text-xs uppercase tracking-wider text-accent-primary bg-accent-primary/10 py-1 px-3 rounded-full">
                         {project.category}
                       </span>
                     </div>
-                    <h3 className="font-pixel text-lg mb-3 text-text group-hover:text-accent-primary transition-colors">
+                    <h3 className="font-pixel text-lg mb-3 text-text group-hover:text-accent-primary transition-colors duration-300">
                       {project.title}
                     </h3>
                     <p className="text-text-secondary text-sm mb-6 flex-grow">
                       {project.description}
                     </p>
-                    
+
                     <div className="mt-auto">
-                      <a 
-                        href={project.link} 
+                      <Link
+                        to={`/projects/${project.slug}`}
                         className="inline-flex items-center text-accent-primary hover:text-accent-secondary transition-colors"
                       >
-                        VIEW PROJECT <ExternalLink size={16} className="ml-2" />
-                      </a>
+                        VIEW PROJECT <ArrowRight size={16} className="ml-2" />
+                      </Link>
                     </div>
                   </div>
-                  
-                  <div className="absolute inset-0 bg-gradient-to-r from-accent-primary/5 to-accent-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                 </div>
               </Tilt>
             </motion.div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { services } from '../data/services';
-import { Settings, GitBranch, Link } from 'lucide-react';
+import { Settings, GitBranch, Link, Monitor } from 'lucide-react';
 import { Tilt } from 'react-tilt';
 
 const Services: React.FC = () => {
@@ -75,6 +75,8 @@ const Services: React.FC = () => {
         return <GitBranch size={36} className="text-accent-primary" />;
       case 'Link':
         return <Link size={36} className="text-accent-primary" />;
+      case 'Monitor':
+        return <Monitor size={36} className="text-accent-primary" />;
       default:
         return <Settings size={36} className="text-accent-primary" />;
     }
@@ -110,7 +112,7 @@ const Services: React.FC = () => {
             ))}
           </h2>
           <p className="text-text-secondary max-w-2xl mx-auto">
-            I provide automation solutions that streamline your business operations and boost productivity.
+            I build AI‑powered internal tools, workflows, and integrations — often picking up where no‑code or vibe‑coding attempts left off.
           </p>
         </motion.div>
         
@@ -118,7 +120,7 @@ const Services: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
           {services.map((service, index) => (
             <Tilt key={service.id} options={defaultTiltOptions}>
@@ -159,27 +161,6 @@ const Services: React.FC = () => {
                   <p className="text-text-secondary leading-relaxed">
                     {service.description}
                   </p>
-                  
-                  <motion.div 
-                    className="mt-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <button className="text-sm uppercase tracking-wider text-accent-primary hover:text-accent-secondary transition-colors flex items-center group/btn">
-                      Learn More
-                      <motion.svg 
-                        className="ml-2 w-4 h-4"
-                        initial={{ x: 0 }}
-                        whileHover={{ x: 5 }}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                      </motion.svg>
-                    </button>
-                  </motion.div>
                 </div>
               </motion.div>
             </Tilt>

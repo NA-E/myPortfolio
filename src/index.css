@@ -55,9 +55,8 @@
   }
 
   .heading-glow {
-    text-shadow: 0 0 10px theme('colors.accent.primary.DEFAULT'),
-                 0 0 20px theme('colors.accent.primary.DEFAULT'),
-                 0 0 30px theme('colors.accent.primary.DEFAULT');
+    text-shadow: 0 0 4px rgba(255, 110, 199, 0.3),
+                 0 0 8px rgba(255, 110, 199, 0.15);
   }
 
   .gradient-text {

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Code, Workflow } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Particles from 'react-particles';
 import { loadSlim } from "tsparticles-slim";
 import type { Container, Engine } from "tsparticles-engine";
@@ -69,26 +69,27 @@ const Hero: React.FC = () => {
       />
       
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
           <div className="md:col-span-7 text-center md:text-left">
-            <motion.p 
-              className="text-sm md:text-base text-text-secondary uppercase tracking-widest mb-4 typing-animation"
+            <motion.p
+              className="text-sm md:text-base uppercase tracking-widest mb-4 typing-animation font-semibold text-text-secondary"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              Streamlining Business Operations
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-primary to-accent-secondary">AI Product Engineer</span>
             </motion.p>
             
-            <motion.h1 
-              className="font-pixel text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight heading-glow mb-6"
+            <motion.h1
+              className="font-pixel text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 tracking-wide"
+              style={{ lineHeight: '1.5', textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.3 }}
             >
-              AUTOMATION
+              YOU KNOW IT CAN BE DONE.
               <br className="hidden md:block" />
-              <span className="heading-glow block md:inline">ENGINEER</span>
+              <span className="block md:inline" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}>I MAKE IT WORK.</span>
             </motion.h1>
             
             <div className="overflow-hidden">
@@ -99,8 +100,8 @@ const Hero: React.FC = () => {
                 animate="visible"
                 custom={0}
               >
-                I design and implement automation solutions that transform manual processes into efficient, 
-                error-free workflows — helping businesses save time, reduce costs, and focus on growth.
+                I design, fix, and scale AI‑driven tools and workflows for teams who outgrew
+                no‑code hacks and vibe‑coding experiments.
               </motion.p>
             </div>
             
@@ -120,52 +121,43 @@ const Hero: React.FC = () => {
                 href="#contact"
                 className="w-full sm:w-auto text-center inline-block border border-accent-primary text-accent-primary font-medium py-3 px-8 rounded-lg hover:bg-accent-primary hover:text-background transition-all duration-300 hover:scale-105"
               >
-                CONTACT ME
+                LET'S TALK
               </a>
             </motion.div>
           </div>
           
-          <motion.div 
-            className="md:col-span-5 font-pixel relative mt-16 md:mt-0 hidden md:block"
+          <motion.div
+            className="md:col-span-5 relative mt-8 md:mt-0 flex items-stretch"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            <div className="absolute -top-32 -right-32 w-64 h-64 bg-accent-primary/5 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-accent-secondary/5 rounded-full blur-3xl"></div>
-            
-            <motion.div
-              className="absolute -right-4 top-1/2 transform -translate-y-1/2"
-              animate={{
-                y: [0, -10, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <div className="w-16 md:w-20 h-16 md:h-20 rounded-full border-2 border-accent-primary/30 flex items-center justify-center">
-                <Code className="w-6 md:w-8 h-6 md:h-8 text-accent-primary" />
+            {/* Terminal status card — stretches to match left column height */}
+            <div className="relative z-10 bg-[rgba(255,255,255,0.03)] border border-white/10 rounded-lg w-full font-mono text-sm overflow-hidden shadow-lg shadow-black/20 flex flex-col">
+              {/* Title bar */}
+              <div className="flex items-center bg-[rgba(255,255,255,0.05)] border-b border-white/[0.08] px-3 py-2">
+                <div className="flex items-center gap-[8px]">
+                  <span className="w-[10px] h-[10px] rounded-full bg-[#ff5f57]"></span>
+                  <span className="w-[10px] h-[10px] rounded-full bg-[#ffbd2e]"></span>
+                  <span className="w-[10px] h-[10px] rounded-full bg-[#28ca42]"></span>
+                </div>
+                <span className="flex-1 text-center text-xs text-white/40">nourin@portfolio — bash</span>
               </div>
-            </motion.div>
-            
-            <motion.div
-              className="absolute -left-4 bottom-0"
-              animate={{
-                y: [0, 10, 0],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                delay: 1
-              }}
-            >
-              <div className="w-12 md:w-16 h-12 md:h-16 rounded-full border-2 border-accent-secondary/30 flex items-center justify-center">
-                <Workflow className="w-4 md:w-6 h-4 md:h-6 text-accent-secondary" />
+              {/* Terminal body */}
+              <div className="p-5 flex-1 flex flex-col justify-center">
+                <p className="text-accent-primary mb-2">$ whoami</p>
+                <div className="text-white/15 mb-2 select-none" aria-hidden="true">─────────────────────────</div>
+                <div className="space-y-1 text-[#d1d5db]">
+                  <p>role: <span className="text-white">ai_product_engineer</span></p>
+                  <p>stack: <span className="text-white">python | typescript | n8n</span></p>
+                  <p>clients: <span className="text-white">US · CA · EU · MENA</span></p>
+                  <p>mode: <span className="text-accent-primary">rescue_failed_projects</span></p>
+                  <p>status: <span className="text-green-400">available_for_hire</span></p>
+                </div>
+                <div className="text-white/15 mt-2 select-none" aria-hidden="true">─────────────────────────</div>
+                <p className="mt-2 text-accent-primary">$ <span className="animate-blink">█</span></p>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

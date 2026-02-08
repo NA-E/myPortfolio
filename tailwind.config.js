@@ -26,6 +26,7 @@ export default {
       fontFamily: {
         pixel: ['"Press Start 2P"', 'cursive'],
         sans: ['Inter', 'sans-serif'],
+        mono: ['"JetBrains Mono"', '"Fira Code"', '"Courier New"', 'monospace'],
       },
       spacing: {
         section: '120px',

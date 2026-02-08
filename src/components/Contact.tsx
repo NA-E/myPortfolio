@@ -58,7 +58,7 @@ const Contact: React.FC = () => {
   const socialLinks = [
     { icon: Github, href: '#', label: 'github.com/nourinahmed' },
     { icon: Linkedin, href: '#', label: 'linkedin.com/in/nourinahmed' },
-    { icon: Mail, href: 'mailto:nourin.ahmed@example.com', label: 'nourin.ahmed@example.com' }
+    { icon: Mail, href: 'mailto:ekanourin@gmail.com', label: 'ekanourin@gmail.com' }
   ];
 
   return (
@@ -89,7 +89,7 @@ const Contact: React.FC = () => {
             ))}
           </h2>
           <p className="text-text-secondary max-w-2xl mx-auto">
-            Interested in automating your business processes? Let's discuss how I can help.
+            Have an AI project that needs expert engineering — or one that's stuck and needs fixing? Let's talk.
           </p>
         </motion.div>
         

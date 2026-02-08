@@ -93,23 +93,25 @@ const Introduction: React.FC = () => {
               animate={inView ? "visible" : "hidden"}
               transition={{ delay: 0.8 }}
             >
-              I'm a passionate <span className="gradient-text font-semibold">Automation Engineer</span> with expertise 
-              in creating efficient workflows and integrating business systems. 
-              My goal is to help companies streamline their operations and eliminate repetitive tasks.
+              I'm an <span className="gradient-text font-semibold">AI Product Engineer</span> with a background in
+              professional software engineering and an MSc in Artificial Intelligence (research track).
+              <br />
+              I help teams who've hit the limits of no‑code tools, vibe‑coding experiments, or junior
+              implementations turn their ideas into production‑grade internal tools.
             </motion.p>
             
-            <motion.p
-              className="text-base text-text-secondary leading-relaxed"
+            <motion.ul
+              className="text-base text-text-secondary leading-relaxed space-y-2 list-none"
               variants={introVariants}
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               transition={{ delay: 0.9 }}
             >
-              With over 5 years of experience in process automation and workflow optimization, 
-              I specialize in developing N8N workflows that connect disparate systems and automate 
-              complex business processes. My solutions have helped companies save thousands of hours 
-              and significantly reduce operational costs.
-            </motion.p>
+              <li className="flex items-start gap-2"><span className="text-accent-primary mt-1.5 text-xs">▸</span>Designed and built custom applications and AI‑orchestrated workflows</li>
+              <li className="flex items-start gap-2"><span className="text-accent-primary mt-1.5 text-xs">▸</span>Built data pipelines for clients who need more than simple automations</li>
+              <li className="flex items-start gap-2"><span className="text-accent-primary mt-1.5 text-xs">▸</span>Combine solid engineering practices with modern AI tools</li>
+              <li className="flex items-start gap-2"><span className="text-accent-primary mt-1.5 text-xs">▸</span>Ship systems that stay reliable and maintainable under real‑world usage</li>
+            </motion.ul>
             
             <motion.div
               variants={introVariants}
@@ -118,7 +120,7 @@ const Introduction: React.FC = () => {
               transition={{ delay: 1 }}
               className="flex flex-wrap gap-2 sm:gap-3"
             >
-              {["N8N", "API Integration", "ETL", "JavaScript", "Webhooks", "Database", "REST API", "CRM"].map((skill, index) => (
+              {["Claude Code", "Lovable", "N8N", "Bolt", "Replit", "AI Automation", "AI Agents", "Workflow Automation"].map((skill, index) => (
                 <span 
                   key={index} 
                   className="bg-dark-surface px-3 sm:px-4 py-2 rounded-lg text-sm border border-accent-primary/20 text-text-secondary hover:border-accent-primary/50 hover:text-text transition-all duration-300"
@@ -141,10 +143,10 @@ const Introduction: React.FC = () => {
                   <div className="h-3 w-3 rounded-full bg-gradient-to-r from-accent-primary to-accent-secondary"></div>
                 </div>
                 <div>
-                  <h3 className="font-pixel text-accent-primary text-sm sm:text-base mb-2 sm:mb-3">AUTOMATION PHILOSOPHY</h3>
+                  <h3 className="font-pixel text-accent-primary text-sm sm:text-base mb-2 sm:mb-3">ENGINEERING PHILOSOPHY</h3>
                   <p className="text-text-secondary text-base leading-relaxed">
-                    I believe that automation should be intuitive, reliable, and transparent. 
-                    Every workflow I build is designed with error handling, monitoring, and scalability in mind.
+                    AI‑powered systems should be reliable, testable, and transparent.
+                    Every tool I build is designed with proper error handling, monitoring, and a clear path to scale.
                   </p>
                 </div>
               </div>
@@ -156,9 +158,9 @@ const Introduction: React.FC = () => {
                 <div>
                   <h3 className="font-pixel text-accent-primary text-sm sm:text-base mb-2 sm:mb-3">MY APPROACH</h3>
                   <p className="text-text-secondary text-base leading-relaxed">
-                    I start by understanding your business processes in depth, identifying bottlenecks 
-                    and opportunities for automation. Then I design, implement, and refine workflows to 
-                    achieve maximum efficiency.
+                    I start by reviewing what you already have — even if it's a half‑working prototype
+                    or a tangled no‑code setup. Then I clarify requirements, redesign the architecture,
+                    and rebuild it so it actually works in production.
                   </p>
                 </div>
               </div>
@@ -168,10 +170,10 @@ const Introduction: React.FC = () => {
                   <div className="h-3 w-3 rounded-full bg-gradient-to-r from-accent-primary to-accent-secondary"></div>
                 </div>
                 <div>
-                  <h3 className="font-pixel text-accent-primary text-sm sm:text-base mb-2 sm:mb-3">RESULTS DELIVERED</h3>
+                  <h3 className="font-pixel text-accent-primary text-sm sm:text-base mb-2 sm:mb-3">RESCUE & REBUILD</h3>
                   <p className="text-text-secondary text-base leading-relaxed">
-                    My automation solutions typically reduce manual processing time by 70-95%, 
-                    with an average ROI of 300% within the first year of implementation.
+                    If you've already tried to build with AI or no‑code and got stuck, I help you
+                    untangle what's there and turn it into a solid, production‑ready system.
                   </p>
                 </div>
               </div>
