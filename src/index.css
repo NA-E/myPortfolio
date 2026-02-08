@@ -43,7 +43,7 @@
 
 @layer components {
   .section {
-    @apply py-section-mobile md:py-section px-4 sm:px-8 md:px-16 lg:px-24 2xl:px-32;
+    @apply py-section-mobile lg:py-section px-4 sm:px-8 md:px-16 lg:px-24 2xl:px-32;
   }
 
   .section-divider {
