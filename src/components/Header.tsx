@@ -90,7 +90,7 @@ const Header: React.FC = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8">
+          <nav className="hidden lg:flex space-x-6 lg:space-x-8">
             {links.map((link, i) => (
               <motion.a
                 key={link.name}
@@ -107,8 +107,8 @@ const Header: React.FC = () => {
           </nav>
           
           {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-accent-primary p-2"
+          <button
+            className="lg:hidden text-accent-primary p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -119,7 +119,7 @@ const Header: React.FC = () => {
       
       {/* Mobile Navigation */}
       <motion.div 
-        className="fixed top-0 right-0 h-screen w-[250px] bg-dark-surface md:hidden z-50 pt-20 px-8 border-l border-accent-primary/10"
+        className="fixed top-0 right-0 h-screen w-[250px] bg-dark-surface lg:hidden z-50 pt-20 px-8 border-l border-accent-primary/10"
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         variants={menuVariants}
@@ -144,7 +144,7 @@ const Header: React.FC = () => {
       {/* Overlay for mobile menu */}
       {isOpen && (
         <motion.div 
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden z-40"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm lg:hidden z-40"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
