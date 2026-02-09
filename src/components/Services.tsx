@@ -97,7 +97,7 @@ const Services: React.FC = () => {
           animate={inView ? "visible" : "hidden"}
           className="mb-16 text-center"
         >
-          <h2 className="font-pixel text-3xl md:text-4xl lg:text-5xl mb-6 heading-glow">
+          <h2 className="font-pixel text-xl sm:text-2xl md:text-4xl lg:text-5xl mb-6 heading-glow">
             {titleText.split('').map((letter, i) => (
               <motion.span
                 key={i}
@@ -154,7 +154,7 @@ const Services: React.FC = () => {
                     {getIcon(service.icon)}
                   </motion.div>
                   
-                  <h3 className="font-pixel text-accent-primary text-lg mb-4 group-hover:heading-glow transition-all duration-300">
+                  <h3 className="font-pixel text-accent-primary text-xs sm:text-sm md:text-lg mb-4 group-hover:heading-glow transition-all duration-300">
                     {service.title}
                   </h3>
                   

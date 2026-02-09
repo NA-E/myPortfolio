@@ -64,7 +64,7 @@ const ProjectPage: React.FC = () => {
               {project.category}
             </span>
           </div>
-          <h1 className="font-pixel text-3xl md:text-4xl lg:text-5xl mb-4 heading-glow">
+          <h1 className="font-pixel text-lg sm:text-2xl md:text-4xl lg:text-5xl mb-4 heading-glow">
             {project.title}
           </h1>
           <p className="text-lg md:text-xl text-text-secondary">
@@ -101,7 +101,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="mb-14"
         >
-          <h2 className="font-pixel text-lg mb-4 text-accent-primary">WHAT IT DOES</h2>
+          <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-4 text-accent-primary">WHAT IT DOES</h2>
           <p className="text-text-secondary leading-relaxed">{project.overview}</p>
         </motion.section>
 
@@ -113,7 +113,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="mb-14"
         >
-          <h2 className="font-pixel text-lg mb-4 text-accent-primary">THE PROBLEM</h2>
+          <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-4 text-accent-primary">THE PROBLEM</h2>
           <p className="text-text-secondary leading-relaxed">{project.challenge}</p>
         </motion.section>
 
@@ -125,7 +125,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="mb-14"
         >
-          <h2 className="font-pixel text-lg mb-4 text-accent-primary">THE SOLUTION</h2>
+          <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-4 text-accent-primary">THE SOLUTION</h2>
           <p className="text-text-secondary leading-relaxed">{project.solution}</p>
         </motion.section>
 
@@ -137,7 +137,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="mb-14"
         >
-          <h2 className="font-pixel text-lg mb-4 text-accent-primary">TECH STACK</h2>
+          <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-4 text-accent-primary">TECH STACK</h2>
           <div className="flex flex-wrap gap-3">
             {project.techStack.map((tech) => (
               <span
@@ -158,7 +158,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="mb-14"
         >
-          <h2 className="font-pixel text-lg mb-6 text-accent-primary">KEY FEATURES</h2>
+          <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-6 text-accent-primary">KEY FEATURES</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {project.features.map((feature) => (
               <div
@@ -181,7 +181,7 @@ const ProjectPage: React.FC = () => {
             variants={fadeIn}
             className="mb-14"
           >
-            <h2 className="font-pixel text-lg mb-4 text-accent-primary">RESULTS</h2>
+            <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-4 text-accent-primary">RESULTS</h2>
             <ul className="space-y-3">
               {project.results.map((result, i) => (
                 <li key={i} className="flex items-start text-text-secondary">
@@ -202,7 +202,7 @@ const ProjectPage: React.FC = () => {
             variants={fadeIn}
             className="mb-14"
           >
-            <h2 className="font-pixel text-lg mb-6 text-accent-primary">CLIENT FEEDBACK</h2>
+            <h2 className="font-pixel text-xs sm:text-sm md:text-lg mb-6 text-accent-primary">CLIENT FEEDBACK</h2>
             <div className="bg-dark-surface border border-accent-primary/10 rounded-lg p-6 md:p-8 relative">
               <div className="absolute top-4 right-4 text-accent-primary/20">
                 <MessageCircle size={32} />
@@ -242,7 +242,7 @@ const ProjectPage: React.FC = () => {
           variants={fadeIn}
           className="text-center pt-8 pb-4"
         >
-          <h2 className="font-pixel text-xl md:text-2xl mb-4 heading-glow">
+          <h2 className="font-pixel text-sm sm:text-lg md:text-2xl mb-4 heading-glow">
             WANT SOMETHING LIKE THIS?
           </h2>
           <p className="text-text-secondary mb-8 max-w-md mx-auto">

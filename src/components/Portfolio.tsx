@@ -67,7 +67,7 @@ const Portfolio: React.FC = () => {
           animate={inView ? "visible" : "hidden"}
           className="mb-16 text-center"
         >
-          <h2 className="font-pixel text-3xl md:text-4xl lg:text-5xl mb-6 heading-glow">
+          <h2 className="font-pixel text-xl sm:text-2xl md:text-4xl lg:text-5xl mb-6 heading-glow">
             SELECTED WORK
           </h2>
           <p className="text-text-secondary max-w-2xl mx-auto">
@@ -104,7 +104,7 @@ const Portfolio: React.FC = () => {
                         {project.category}
                       </span>
                     </div>
-                    <h3 className="font-pixel text-lg mb-3 text-text group-hover:text-accent-primary transition-colors duration-300">
+                    <h3 className="font-pixel text-sm sm:text-base md:text-lg mb-3 text-text group-hover:text-accent-primary transition-colors duration-300">
                       {project.title}
                     </h3>
                     <p className="text-text-secondary text-sm mb-6 flex-grow">

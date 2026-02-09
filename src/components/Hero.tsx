@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
             </motion.p>
             
             <motion.h1
-              className="font-pixel text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 tracking-wide"
+              className="font-pixel text-sm sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 tracking-normal sm:tracking-wide"
               style={{ lineHeight: '1.5', textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -89,7 +89,7 @@ const Hero: React.FC = () => {
             >
               YOU KNOW IT CAN BE DONE.
               <br className="hidden md:block" />
-              <span className="block md:inline" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}>I MAKE IT WORK.</span>
+              <span className="block md:inline mt-3 md:mt-0" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}>I MAKE IT <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent-primary to-accent-secondary">HAPPEN.</span></span>
             </motion.h1>
             
             <div className="overflow-hidden">
@@ -146,7 +146,7 @@ const Hero: React.FC = () => {
               {/* Terminal body */}
               <div className="p-5 flex-1 flex flex-col justify-center">
                 <p className="text-accent-primary mb-2">$ whoami</p>
-                <div className="text-white/15 mb-2 select-none" aria-hidden="true">─────────────────────────</div>
+                <div className="h-px w-full bg-white/15 mb-2" aria-hidden="true"></div>
                 <div className="space-y-1 text-[#d1d5db]">
                   <p>role: <span className="text-white">ai_product_engineer</span></p>
                   <p>stack: <span className="text-white">python | typescript | n8n</span></p>
@@ -154,7 +154,7 @@ const Hero: React.FC = () => {
                   <p>mode: <span className="text-accent-primary">rescue_failed_projects</span></p>
                   <p>status: <span className="text-green-400">available_for_hire</span></p>
                 </div>
-                <div className="text-white/15 mt-2 select-none" aria-hidden="true">─────────────────────────</div>
+                <div className="h-px w-full bg-white/15 mt-2" aria-hidden="true"></div>
                 <p className="mt-2 text-accent-primary">$ <span className="animate-blink">█</span></p>
               </div>
             </div>

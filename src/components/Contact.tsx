@@ -74,7 +74,7 @@ const Contact: React.FC = () => {
           animate={inView ? "visible" : "hidden"}
           className="mb-12 text-center"
         >
-          <h2 className="font-pixel text-3xl md:text-4xl lg:text-5xl mb-6 heading-glow">
+          <h2 className="font-pixel text-xl sm:text-2xl md:text-4xl lg:text-5xl mb-6 heading-glow">
             {connectText.split('').map((letter, i) => (
               <motion.span
                 key={i}
