@@ -27,6 +27,24 @@
 - About section tech tags: Claude Code, Lovable, N8N, Bolt, Replit, AI Automation, AI Agents, Workflow Automation
 - About section "Over the last few years" content is bullet points (not prose)
 
+## Routing & Navigation
+- Uses `react-router-dom` with `BrowserRouter` in App.tsx
+- Routes: `/` (HomePage) and `/projects/:slug` (ProjectPage)
+- Header/Footer use `handleNavClick` + `useNavigate` for cross-page hash scrolling — navigates to `/` first from detail pages, then smooth-scrolls to section
+- `vercel.json` handles SPA fallback rewrites for production
+
+## Case Study Pages
+- ProjectPage at `src/pages/ProjectPage.tsx`
+- Sections: header → optional video embed → What It Does → The Problem → The Solution → Tech Stack → Key Features → Results → Client Feedback → CTA
+- Max width 800px, Framer Motion `whileInView` fade-in for each section
+- Testimonial frame supports either screenshot image OR text quote
+
+## Project Data
+- 6 real projects in `src/data/projects.ts` — Leadflow, Gemini Analysis, Scriptwriter Agent, Meta Ads MCP, Newsletter Agent, Serenova Home
+- No client names in copy — business-outcome focused, non-technical language
+- Images are stock photos with TODO comments — replace with real screenshots
+- Portfolio grid: 6 cards in `md:grid-cols-3` (2 clean rows)
+
 ## Patterns & Gotchas
 - Hover effects: Avoid combining framer-motion `whileHover` with `react-tilt` — use CSS transitions instead to prevent visual conflicts
 - Card overlays: Don't use `absolute inset-0` overlays on hover that cover images — causes "black card" effect

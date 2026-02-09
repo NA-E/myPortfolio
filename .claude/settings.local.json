@@ -13,7 +13,9 @@
       "Bash(npx tsc:*)",
       "Bash(start \"\" \"E:\\\\1.Claude Code\\\\nourin-portfolio\\\\portfolio-playground.html\")",
       "Bash(ls -la \"E:\\\\1.Claude Code\\\\nourin-portfolio\\\\src\\\\components\"\" | grep -i \"detail|case|project \")",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git pull:*)",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "ask": []
