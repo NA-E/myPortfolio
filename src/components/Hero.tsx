@@ -27,7 +27,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-0 lg:min-h-screen flex flex-col justify-center overflow-hidden px-4 pt-28 pb-16 lg:py-0">
+    <section id="home" className="relative min-h-screen flex flex-col justify-center overflow-hidden px-4 py-20 md:py-0">
       <Particles
         className="particles-container"
         id="tsparticles"
@@ -69,8 +69,8 @@ const Hero: React.FC = () => {
       />
       
       <div className="container mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <div className="lg:col-span-7 text-center lg:text-left">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+          <div className="md:col-span-7 text-center md:text-left">
             <motion.p
               className="text-sm md:text-base uppercase tracking-widest mb-4 typing-animation font-semibold text-text-secondary"
               initial={{ opacity: 0, y: 20 }}
@@ -88,13 +88,13 @@ const Hero: React.FC = () => {
               transition={{ duration: 1, delay: 0.3 }}
             >
               YOU KNOW IT CAN BE DONE.
-              <br className="hidden lg:block" />
-              <span className="block lg:inline" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}>I MAKE IT WORK.</span>
+              <br className="hidden md:block" />
+              <span className="block md:inline" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15), 0 0 4px rgba(255, 110, 199, 0.3)' }}>I MAKE IT WORK.</span>
             </motion.h1>
             
             <div className="overflow-hidden">
               <motion.p 
-                className="text-sm sm:text-base md:text-lg xl:text-xl leading-relaxed mb-8 text-text-secondary max-w-2xl mx-auto lg:mx-0"
+                className="text-sm sm:text-base md:text-lg xl:text-xl leading-relaxed mb-8 text-text-secondary max-w-2xl mx-auto md:mx-0"
                 variants={textVariants}
                 initial="hidden"
                 animate="visible"
@@ -109,7 +109,7 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1.2 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
             >
               <a 
                 href="#portfolio" 
@@ -127,7 +127,7 @@ const Hero: React.FC = () => {
           </div>
           
           <motion.div
-            className="lg:col-span-5 relative mt-8 lg:mt-0 flex items-stretch"
+            className="md:col-span-5 relative mt-8 md:mt-0 flex items-stretch"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -163,7 +163,7 @@ const Hero: React.FC = () => {
       </div>
       
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer hidden lg:block"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer hidden md:block"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ 
