@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const Header: React.FC = () => {
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8">
+          <nav className="hidden md:flex space-x-6 lg:space-x-8 items-center">
             {links.map((link, i) => (
               <motion.a
                 key={link.name}
@@ -104,6 +104,18 @@ const Header: React.FC = () => {
                 {link.name}
               </motion.a>
             ))}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 * links.length }}
+            >
+              <Link
+                to="/journal"
+                className="font-medium text-sm hover:text-accent-primary transition-colors hover-link"
+              >
+                JOURNAL
+              </Link>
+            </motion.div>
           </nav>
           
           {/* Mobile Menu Button */}
@@ -138,6 +150,13 @@ const Header: React.FC = () => {
               {link.name}
             </a>
           ))}
+          <Link
+            to="/journal"
+            className="font-medium text-lg hover:text-accent-primary transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            JOURNAL
+          </Link>
         </div>
       </motion.div>
       
