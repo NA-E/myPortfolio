@@ -58,6 +58,11 @@ const JournalPostPage: React.FC = () => {
             <span className="font-mono text-xs text-accent-secondary/70 bg-accent-secondary/10 px-2 py-0.5 rounded">
               {entry.project}
             </span>
+            {entry.author && (
+              <span className="font-mono text-xs text-text-secondary">
+                narrated by <span className="text-accent-primary">{entry.author}</span>
+              </span>
+            )}
           </div>
 
           <h1 className="font-pixel text-lg sm:text-2xl md:text-3xl mb-4 heading-glow leading-relaxed">

@@ -18,6 +18,7 @@ export interface JournalEntry {
   title: string;
   subtitle: string;
   project: string;
+  author?: string;  // who narrates this entry (e.g. 'Nourin', 'Jarvis')
   tags: string[];
   tldr: string;
   sections: JournalSection[];
