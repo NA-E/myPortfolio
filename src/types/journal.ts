@@ -9,6 +9,7 @@ export interface Recipe {
 export interface JournalSection {
   heading: string;
   paragraphs: string[];
+  bullets?: string[];  // optional bullet list rendered after paragraphs
 }
 
 export interface JournalEntry {

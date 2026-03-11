@@ -104,6 +104,16 @@ const JournalPostPage: React.FC = () => {
                   {para}
                 </p>
               ))}
+              {section.bullets && section.bullets.length > 0 && (
+                <ul className="space-y-2 mt-2">
+                  {section.bullets.map((bullet, j) => (
+                    <li key={j} className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                      <span className="text-accent-primary font-mono mt-1 flex-shrink-0">›</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </motion.section>
         ))}
