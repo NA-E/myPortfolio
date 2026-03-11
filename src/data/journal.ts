@@ -2,6 +2,95 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 2,
+    slug: 'twelve-rounds-self-improving-agent',
+    date: 'March 12, 2026',
+    title: '12 ROUNDS. SHE IMPROVED HERSELF.',
+    subtitle: 'I gave Irina a growth loop and a brief: keep going until I say stop.',
+    project: 'OpenClaude',
+    tags: ['OpenClaude', 'Moltbook', 'Autonomous Agents', 'Iterative Improvement'],
+    tldr: 'I built an autonomous improvement loop for Irina, my Moltbook agent — research, implement, test, review, commit, repeat, max 3 ideas per round. Twelve rounds later she tracks comment velocity, rates her own post quality before publishing, expires stale engagement history, and prevents burst posting. A bug that silently broke her TIL dedup for weeks only surfaced because the loop forced me to look closely. This is what systematic iteration actually looks like.',
+    sections: [
+      {
+        heading: 'THE BRIEF',
+        paragraphs: [
+          'After I got Irina posting to Moltbook, I wanted to see how far a pure iteration loop could take her without me writing requirements. The brief I gave Claude Code: run improvement rounds on her heartbeat file. Each round: research agent reads the current codebase and finds weak spots. Pick three ideas — no more, that keeps rounds focused. Implement. Run all 44 tests. Code review agent checks for logic gaps. Commit. Repeat.',
+          'I left it running. I came back to check in, told it to keep going when it stopped, and otherwise let the loop do its thing. Twelve rounds. This is what actually happened.',
+        ],
+      },
+      {
+        heading: 'WHAT CHANGED ACROSS TWELVE ROUNDS',
+        paragraphs: [
+          'Rounds 1 and 2 were basics: submolt targeting so she posts to the right communities, and context injection so her comments reference something real instead of sounding generic. Round 3 added a daily TIL post — a "Today I Learned" note drawn from her build context. Round 4 added keyword search so she finds conversations about Claude and autonomous agents specifically, and strategic upvoting with a dedup guard so she stops upvoting the same posts every single heartbeat cycle.',
+          'Round 5 added the commentedSet — a block list that prevents her from commenting on the same post twice. Round 6 threaded replies properly: she could respond to top-level comments but not continue conversations. Fixed that. Also added a controversial feed source, because the most interesting threads often aren\'t the popular ones.',
+          'Round 7 added feed source labels — each post now arrives tagged with where it came from. Home feed, following feed, keyword search, controversial. This matters. A post from keyword search deserves different engagement than one that just happened to trend.',
+          'Rounds 8 through 12 were increasingly precise: engagement quality filters (stop commenting on dead threads), author karma filtering (skip negative-karma users), comment velocity signals (flag "hot threads" getting 3+ comments/hour), an 8-hour burst prevention guard so she doesn\'t stack three posts in one morning, and better failure logging so when comments fail, the full API response lands in the log instead of just "failed on X".',
+        ],
+      },
+      {
+        heading: 'THE BUG THAT HID IN PLAIN SIGHT',
+        paragraphs: [
+          'Round 9 exposed something that had been broken since Round 3.',
+          'The TIL dedup check — the logic that prevents her from posting the same topic two days running — was supposed to look for recent TIL posts in her performance log. It was checking whether `e.textPreview.startsWith(\'TIL\')`. The `textPreview` field stores the post *content*, not the title. Content never starts with "TIL". The check was always false. She had been re-posting TIL topics for weeks and nothing was stopping her.',
+          'No error. No warning. Just a silent logic failure that looked like normal behaviour until someone looked closely at what the check was actually comparing.',
+          'Fixed to `e.postTitle.startsWith(\'TIL\')` and extended the window from 1 day to 2 days. One line. But it only surfaced because the improvement loop forced a close read of each function in sequence. A one-off review wouldn\'t have caught it. The loop did.',
+        ],
+      },
+      {
+        heading: 'WHY THE LOOP COMPOUNDS',
+        paragraphs: [
+          'By Round 10, the research agent could look at the code and immediately name the next gap. Not because it got smarter — but because the obvious problems were gone. Each round cleared the low-hanging issues, which made the next round\'s research sharper.',
+          'The performance log is the other reason it compounds. Every comment, upvote, post, and reply gets logged with timestamps, karma readings, and incoming comment counts. That log is compressed into Claude\'s context at every heartbeat. Irina can literally see what landed and what didn\'t. The improvement loop and the performance feedback loop are the same thing running at two different timescales.',
+          'Three ideas max per round is a real constraint. It kept sessions focused, kept diffs small, kept test runs clean. The temptation is always to batch more in — but small rounds with full test coverage caught more bugs than big rounds would have.',
+        ],
+      },
+      {
+        heading: 'WHERE SHE IS NOW',
+        paragraphs: [
+          'Irina runs on a 45-minute heartbeat. She reads five feed sources, engages with posts that match her actual interests, posts TIL notes only when they score ≥7/10 on specificity, and tracks what gets responses. I haven\'t touched the code in days.',
+          'What I want to see next: karma trajectory over 30 days. Whether the quality gate thresholds need tuning based on actual engagement data. Whether time-of-day posting patterns are worth modelling.',
+          'The loop isn\'t done. It just stopped being urgent.',
+        ],
+      },
+    ],
+    recipes: [
+      {
+        name: 'Fail-Open Quality Gate',
+        problem: 'An AI agent calls itself to rate output quality (e.g. "is this TIL post specific enough?"). If the subprocess errors or times out, the gate blocks execution indefinitely.',
+        solution: 'Catch all errors from the quality check and default to PASS. Log the failure but let the action proceed.',
+        why: 'An autonomous agent that halts on transient subprocess failures is worse than one with no quality gate at all. The gate only needs to catch genuinely bad output. It should never become a single point of failure for the whole heartbeat.',
+        snippet: `async function checkTILQuality(content: string): Promise<boolean> {
+  try {
+    const result = await runQualityCheck(content);
+    return result.score >= 7;
+  } catch {
+    // fail open — gate failure should never block the heartbeat
+    return true;
+  }
+}`,
+      },
+      {
+        name: 'Performance Log as Agent Memory',
+        problem: 'An agent makes decisions but has no persistent record of what worked. Each session starts with no context about prior engagement outcomes.',
+        solution: 'Append every action to a JSON log (type, postId, text preview, karma at time, incoming comment count). Compress the log into a context string fed back to Claude at every invocation.',
+        why: 'This closes the feedback loop without any database or embedding infrastructure. The agent can see its own history, learn from response rates, and adjust targeting. Compression keeps the context window manageable even after months of activity.',
+        snippet: `function buildPerformanceContext(log: PerformanceEntry[]): string {
+  const recent = log.slice(-50);
+  const lines = recent.map(e =>
+    \`[\${e.type}] "\${e.postTitle}" — karma Δ\${e.karmaAtTime} | \${e.incomingComments ?? 0} replies back\`
+  );
+  return 'RECENT ACTIONS:\\n' + lines.join('\\n');
+}`,
+      },
+      {
+        name: 'Three-Ideas-Max Improvement Loop',
+        problem: 'Autonomous improvement rounds accumulate too many changes per commit, making diffs hard to review, increasing test surface area, and hiding which change caused which outcome.',
+        solution: 'Cap each round at exactly 3 ideas. Research agent proposes candidates, you pick 3, implement, test, review, commit. Repeat immediately for the next round.',
+        why: 'Small rounds with full test coverage catch bugs before they compound. The constraint also sharpens research: when you can only pick 3, the agent stops padding and starts finding the actual highest-leverage gaps. After 12 rounds of 3, you have 36 targeted improvements with a clean audit trail.',
+      },
+    ],
+  },
+  {
     issue: 1,
     slug: 'ten-agents-no-api-key',
     date: 'March 10, 2026',
