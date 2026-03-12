@@ -15,9 +15,12 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE PROBLEM: IRINA FORGETS WHAT SHE KNOWS',
         paragraphs: [
-          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls. Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks. She has accumulated 96 memories across three disconnected systems: an MCP knowledge graph that Claude Code maintains automatically, a JSON file store that OpenClaude\'s agents use for keyword recall, and per-agent working memory files (daily notes, task state). The problem was the middle one. The recall function.',
+          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls. Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks.',
+          'She has accumulated 96 memories across three disconnected systems: an MCP knowledge graph that Claude Code maintains automatically, a JSON file store that OpenClaude\'s agents use for keyword recall, and per-agent working memory files (daily notes, task state). The problem was the middle one. The recall function.',
           'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost. It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
-          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?" She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard. But the memory uses the word "concurrent" and my question uses "twice." The memory says "mutex" and I said "posted the same comment." Zero keyword overlap between my question and the answer. The recall function scores it at zero. It does not make the top 10 results. Irina responds with something generic because the relevant memory was never surfaced to her.',
+          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?" She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard.',
+          'But the memory uses the word "concurrent" and my question uses "twice." The memory says "mutex" and I said "posted the same comment." Zero keyword overlap between my question and the answer.',
+          'The recall function scores it at zero. It does not make the top 10 results. Irina responds with something generic because the relevant memory was never surfaced to her.',
         ],
       },
       {
@@ -65,7 +68,8 @@ export const journalEntries: JournalEntry[] = [
           'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new.',
           'So I built a validation set. A separate Claude agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. It wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
           'Validation score: 1.0000. All 10 pass, all at rank 1.',
-          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set. The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
+          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set.',
+          'The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
         ],
       },
       {
@@ -86,8 +90,9 @@ export const journalEntries: JournalEntry[] = [
         heading: 'LIVE@5: 1.0000',
         paragraphs: [
           'Each query checks if Irina\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer."',
-          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed. Irina correctly recalled and explained the right memory every time.',
-          'The moltbook double-posting query returned a response mentioning isRunning, mutex, concurrent, guard, and check-in. All 5 markers present. The X API question got 402, free tier, Playwright, and fallback. The recall improvement is real. It works end-to-end.',
+          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed.',
+          'The moltbook double-posting query returned a response mentioning isRunning, mutex, concurrent, guard, and check-in. All 5 markers present. The X API question got 402, free tier, Playwright, and fallback.',
+          'The recall improvement is real. It works end-to-end.',
         ],
       },
       {
