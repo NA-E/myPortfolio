@@ -116,7 +116,8 @@ export const journalEntries: JournalEntry[] = [
         heading: 'WHERE IT STANDS',
         paragraphs: [
           'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies. No API calls. No embeddings. Runs in microseconds on 96 entries.',
-          'The autoresearch loop infrastructure is built but the autonomous part needs a better injection mechanism. The regex approach is dead. Next version will let Claude use its own Edit tool via --dangerously-skip-permissions.',
+          'The autoresearch loop failed this time, but only because of the technical setup: regex-based code injection into a TypeScript file. The concept is sound and the opportunity is huge. An AI agent that can improve its own memory infrastructure overnight, measure the results, and keep only what works.',
+          'The next iteration of the setup will let Claude use its own Edit tool directly instead of regex injection, and will include a research step where Irina reads recall results and proposes what to try next. The goal: Irina improves OpenClaude\'s memory infrastructure autonomously. Mostly.',
           'The benchmark, validation, and live test are all in place. If someone improves recall() in the future, they run three commands and know immediately if it generalizes.',
         ],
       },
