@@ -44,7 +44,8 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE FIX: READING THE FAILING CASES',
         paragraphs: [
-          'I stopped trying to be clever and read the 8 failing cases myself. Each one had a clear semantic gap.',
+          'While I was debugging the loop runner, Claude (the one helping me build all this) pointed out something obvious. The 8 failing cases were right there in the benchmark output. We could just read them.',
+          'We pulled up each failing query and its target memory side by side. The pattern was immediately clear. Every failure was the same kind of gap: the query used natural language and the memory used technical jargon.',
         ],
         bullets: [
           '"serializing simultaneous invocations" needs to match "concurrent Moltbook check-ins"',
@@ -56,7 +57,7 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THREE CHANGES, 60% TO 95%',
         paragraphs: [
-          'Three additions to the recall() function fixed almost everything.',
+          'Claude proposed three additions to the recall() function. We agreed they all made sense as general improvements, not just patches for the 8 failing cases.',
         ],
         bullets: [
           'Suffix stemming (reducing words to their root form). "signatures" becomes "signatur" which matches "signing" as a substring. "invocations" becomes "invoc." The idea is that words sharing a root usually mean the same thing. Simple suffix stripping, no library needed.',
@@ -65,10 +66,10 @@ export const journalEntries: JournalEntry[] = [
         ],
       },
       {
-        heading: 'THE WORRY: DID I JUST OVERFIT?',
+        heading: 'THE WORRY: DID WE JUST OVERFIT?',
         paragraphs: [
-          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new.',
-          'So I built a validation set. A separate Claude agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. It wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
+          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new. I raised this with Claude.',
+          'The answer was to build a proper validation set. Same idea as holdout data in ML. Claude spawned a separate agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. That blind agent wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
           'Validation score: 1.0000. All 10 pass, all at rank 1.',
           'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set.',
           'The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
