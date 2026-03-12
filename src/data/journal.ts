@@ -10,14 +10,14 @@ export const journalEntries: JournalEntry[] = [
     project: 'OpenClaude',
     author: 'Nourin',
     tags: ['OpenClaude', 'Memory', 'Information Retrieval', 'Autoresearch'],
-    tldr: 'OpenClaude has 10 AI agents that share a memory store with 96 entries. When you ask Jarvis "what was that moltbook double-posting bug?", he needs to find the right memory. The keyword algorithm scored 60%. I rewrote the recall function with stemming, synonym expansion, and tag tokenization, hitting 95% on training, 100% on blind holdout, and 100% on live end-to-end through the actual Telegram bot. The whole thing was designed like an ML experiment: training set, validation set, live test set. No embeddings. No API calls. Pure in-memory text matching.',
+    tldr: 'OpenClaude is my personal AI assistant: 10 agents running locally, no API key, talking to me through Telegram. Irina is one of those agents. She has 96 memories stored across three disconnected systems, and the recall function that finds the right memory when you ask a question was only 60% accurate. I rewrote it with stemming (reducing words to their roots), synonym expansion (mapping "simultaneous" to "concurrent"), and tag tokenization (breaking compound tags into searchable parts), hitting 95% on training, 100% on blind holdout, and 100% on live end-to-end through the actual Telegram bot. Designed like an ML experiment: training set, validation set, live test set. No embeddings. No API calls. Pure in-memory text matching.',
     sections: [
       {
-        heading: 'THE PROBLEM: JARVIS FORGETS WHAT HE KNOWS',
+        heading: 'THE PROBLEM: IRINA FORGETS WHAT SHE KNOWS',
         paragraphs: [
-          'OpenClaude stores memories as JSON entries on disk. Each memory has content, tags, a category, and an importance score. When an agent needs context, it calls recall(query, 10) which returns the top 10 most relevant memories.',
+          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls. Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks. She has accumulated 96 memories across three disconnected systems: an MCP knowledge graph that Claude Code maintains automatically, a JSON file store that OpenClaude\'s agents use for keyword recall, and per-agent working memory files (daily notes, task state). The problem was the middle one. The recall function.',
           'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost. It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
-          'Ask "what was that bug where moltbook posted the same comment twice?" and the answer should be the isRunning mutex memory. But the memory says "concurrent" and the query says "simultaneous." The memory says "mutex" and the query says "posted twice." Zero keyword overlap. Zero score. The right answer doesn\'t even make the top 10.',
+          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?" She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard. But the memory uses the word "concurrent" and my question uses "twice." The memory says "mutex" and I said "posted the same comment." Zero keyword overlap between my question and the answer. The recall function scores it at zero. It does not make the top 10 results. Irina responds with something generic because the relevant memory was never surfaced to her.',
         ],
       },
       {
@@ -54,9 +54,9 @@ export const journalEntries: JournalEntry[] = [
           'Three additions to the recall() function fixed almost everything.',
         ],
         bullets: [
-          'Suffix stemming. "signatures" becomes "signatur" which matches "signing" as a substring. "invocations" becomes "invoc." Simple suffix stripping, no library needed.',
-          'Domain synonym expansion. A map of 35 word pairs: "simultaneous" maps to ["concurrent", "parallel", "mutex"]. Synonyms score at half weight (0.5x vs 1.0x for exact matches) so they boost without dominating.',
-          'Tag tokenization. Tags like "moltbook-isrunning-mutex" get split on hyphens into ["moltbook", "isrunning", "mutex"]. A query containing just "mutex" now matches.',
+          'Suffix stemming (reducing words to their root form). "signatures" becomes "signatur" which matches "signing" as a substring. "invocations" becomes "invoc." The idea is that words sharing a root usually mean the same thing. Simple suffix stripping, no library needed.',
+          'Domain synonym expansion (mapping words to other words that mean the same thing in this codebase). A map of 35 word pairs: "simultaneous" maps to ["concurrent", "parallel", "mutex"]. Synonyms score at half weight (0.5x vs 1.0x for exact matches) so they boost relevant results without drowning out exact matches.',
+          'Tag tokenization (breaking compound tags into searchable parts). Tags like "moltbook-isrunning-mutex" get split on hyphens into ["moltbook", "isrunning", "mutex"]. Before this, a query containing just "mutex" could not match the tag. Now it can.',
         ],
       },
       {
@@ -69,9 +69,9 @@ export const journalEntries: JournalEntry[] = [
         ],
       },
       {
-        heading: 'THE REAL TEST: TALKING TO JARVIS',
+        heading: 'THE REAL TEST: TALKING TO IRINA',
         paragraphs: [
-          'Benchmarks run in a temp directory with synthetic setup. The live system has real sessions, real memories, and real Claude subprocess calls generating responses. The only way to know if recall actually improved is to talk to Jarvis and see if he uses the right memories.',
+          'Benchmarks run in a temp directory with synthetic setup. The live system has real sessions, real memories, and real Claude subprocess calls generating responses. The only way to know if recall actually improved is to talk to Irina and see if she uses the right memories.',
           'I wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
         ],
         bullets: [
@@ -85,8 +85,8 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'LIVE@5: 1.0000',
         paragraphs: [
-          'Each query checks if Jarvis\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer."',
-          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed. Jarvis correctly recalled and explained the right memory every time.',
+          'Each query checks if Irina\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer."',
+          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed. Irina correctly recalled and explained the right memory every time.',
           'The moltbook double-posting query returned a response mentioning isRunning, mutex, concurrent, guard, and check-in. All 5 markers present. The X API question got 402, free tier, Playwright, and fallback. The recall improvement is real. It works end-to-end.',
         ],
       },
@@ -98,7 +98,7 @@ export const journalEntries: JournalEntry[] = [
         bullets: [
           'Training (20 queries): 0.6000 to 0.9500. 19 out of 20 pass.',
           'Validation (10 blind holdout): 1.0000. Written by a separate agent that never saw the training set.',
-          'Live E2E (5 queries via gateway): 1.0000. Full pipeline: Telegram query to Jarvis to recall() to Claude to response.',
+          'Live E2E (5 queries via gateway): 1.0000. Full pipeline: Telegram query to Irina to recall() to Claude to response.',
           'Existing unit tests: 44/44 still passing. Nothing broken.',
         ],
       },
