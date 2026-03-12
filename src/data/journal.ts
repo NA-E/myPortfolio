@@ -6,7 +6,7 @@ export const journalEntries: JournalEntry[] = [
     slug: 'teaching-an-ai-to-remember',
     date: 'March 12, 2026',
     title: 'TEACHING AN AI TO REMEMBER',
-    subtitle: 'I improved my AI assistant\'s memory recall from 60% to 95% using the same train/val/test split we use in ML. Then I tested it live.',
+    subtitle: 'We improved my AI assistant\'s memory recall from 60% to 95% using the same train/val/test split we use in ML. Then we tested it live.',
     project: 'OpenClaude',
     author: 'Nourin',
     tags: ['OpenClaude', 'Memory', 'Information Retrieval', 'Autoresearch'],
@@ -15,10 +15,13 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE PROBLEM: IRINA FORGETS WHAT SHE KNOWS',
         paragraphs: [
-          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls. Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks.',
+          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls.',
+          'Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks.',
           'She has accumulated 96 memories across three disconnected systems: an MCP knowledge graph that Claude Code maintains automatically, a JSON file store that OpenClaude\'s agents use for keyword recall, and per-agent working memory files (daily notes, task state). The problem was the middle one. The recall function.',
-          'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost. It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
-          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?" She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard.',
+          'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost.',
+          'It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
+          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?"',
+          'She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard.',
           'But the memory uses the word "concurrent" and my question uses "twice." The memory says "mutex" and I said "posted the same comment." Zero keyword overlap between my question and the answer.',
           'The recall function scores it at zero. It does not make the top 10 results. Irina responds with something generic because the relevant memory was never surfaced to her.',
         ],
@@ -34,17 +37,20 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE FIRST ATTEMPT: AUTORESEARCH LOOP (FAILED)',
         paragraphs: [
-          'Andrej Karpathy published a project called autoresearch where an AI agent improves its own training code in a loop. Read the code, modify the algorithm, run the benchmark, keep improvements, revert regressions. No human in the loop. I wanted to do the same thing for recall().',
-          'I built the infrastructure: a loop runner that spawns claude -p, feeds it the current recall() code and benchmark results, lets it propose a new implementation, injects the code back into store.ts, runs the benchmark, and commits if the score improves. Overnight optimization. Wake up to a better recall function.',
+          'Andrej Karpathy published a project called autoresearch where an AI agent improves its own training code in a loop. Read the code, modify the algorithm, run the benchmark, keep improvements, revert regressions. No human in the loop.',
+          'I wanted to do the same thing for recall().',
+          'We built the infrastructure: a loop runner that spawns claude -p, feeds it the current recall() code and benchmark results, lets it propose a new implementation, injects the code back into store.ts, runs the benchmark, and commits if the score improves. Overnight optimization. Wake up to a better recall function.',
           'It ran 20 iterations. Every single one scored 0.0000.',
-          'The loop runner used a regex to find the recall() method and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file and broke the function signature. Six different approaches logged in recall-results.tsv, all the same result.',
-          'The autoresearch idea is sound. The implementation broke on a mechanical problem: regex-based code injection into a TypeScript file. That is a solvable problem for another day. For now, I did the optimization myself.',
+          'The loop runner used a regex to find the recall() method and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file and broke the function signature.',
+          'Six different approaches logged in recall-results.tsv, all the same result.',
+          'The autoresearch idea is sound. The implementation broke on a mechanical problem: regex-based code injection into a TypeScript file.',
+          'That is a solvable problem for another day. For now, we did the optimization together.',
         ],
       },
       {
         heading: 'THE FIX: READING THE FAILING CASES',
         paragraphs: [
-          'While I was debugging the loop runner, Claude (the one helping me build all this) pointed out something obvious. The 8 failing cases were right there in the benchmark output. We could just read them.',
+          'While we were debugging the loop runner, Claude pointed out something obvious. The 8 failing cases were right there in the benchmark output. We could just read them.',
           'We pulled up each failing query and its target memory side by side. The pattern was immediately clear. Every failure was the same kind of gap: the query used natural language and the memory used technical jargon.',
         ],
         bullets: [
@@ -68,10 +74,14 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE WORRY: DID WE JUST OVERFIT?',
         paragraphs: [
-          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new. I raised this with Claude.',
-          'The answer was to build a proper validation set. Same idea as holdout data in ML. Claude spawned a separate agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. That blind agent wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
+          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new.',
+          'I raised this with Claude.',
+          'The answer was to build a proper validation set. Same idea as holdout data in ML.',
+          'Claude spawned a separate agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map.',
+          'That blind agent wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
           'Validation score: 1.0000. All 10 pass, all at rank 1.',
-          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set.',
+          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements.',
+          'They help every query, not just the ones in the training set.',
           'The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
         ],
       },
@@ -79,7 +89,7 @@ export const journalEntries: JournalEntry[] = [
         heading: 'THE REAL TEST: TALKING TO IRINA',
         paragraphs: [
           'Benchmarks run in a temp directory with synthetic setup. The live system has real sessions, real memories, and real Claude subprocess calls generating responses. The only way to know if recall actually improved is to talk to Irina and see if she uses the right memories.',
-          'I wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
+          'Claude wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
         ],
         bullets: [
           '"hey, what was that bug where moltbook posted the same comment twice?"',
@@ -115,12 +125,15 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'WHERE IT STANDS',
         paragraphs: [
-          'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies. No API calls. No embeddings. Runs in microseconds on 96 entries.',
+          'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies, no API calls, no embeddings. Runs in microseconds on 96 entries.',
           'The autoresearch loop failed this time, but only because of the technical setup: regex-based code injection into a TypeScript file. The concept is sound and the opportunity is huge. An AI agent that can improve its own memory infrastructure overnight, measure the results, and keep only what works.',
           'The next iteration of the setup will let Claude use its own Edit tool directly instead of regex injection, and will include a research step where Irina reads recall results and proposes what to try next. The goal: Irina improves OpenClaude\'s memory infrastructure autonomously. Mostly.',
           'The benchmark, validation, and live test are all in place. If someone improves recall() in the future, they run three commands and know immediately if it generalizes.',
-          'Did we overfit? Honestly, maybe. The synonym map was built by staring at the exact failures. The validation agent wrote queries that turned out easy. The live test only ran 5 queries. None of that is airtight proof.',
-          'But the base setup is done. The benchmark exists. The validation harness exists. The live test exists. Before today there was no way to measure recall quality at all. Now there is. Everything from here is incremental improvement on a foundation that did not exist this morning.',
+          'Did we overfit? Honestly, maybe. The synonym map was built by staring at the exact failures.',
+          'The validation agent wrote queries that turned out easy. The live test only ran 5 queries. None of that is airtight proof.',
+          'But the base setup is done. The benchmark exists, the validation harness exists, the live test exists.',
+          'Before today there was no way to measure recall quality at all. Now there is.',
+          'Everything from here is incremental improvement on a foundation that did not exist this morning.',
         ],
       },
     ],
