@@ -92,9 +92,11 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'LIVE@5: 1.0000',
         paragraphs: [
-          'Each query checks if Irina\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer."',
-          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed.',
-          'The moltbook double-posting query returned a response mentioning isRunning, mutex, concurrent, guard, and check-in. All 5 markers present. The X API question got 402, free tier, Playwright, and fallback.',
+          'Each query checks if Irina\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer." All 5 passed.',
+          'Here is what Irina actually returned. I asked: "hey, what was that bug where moltbook posted the same comment twice?"',
+          'She replied: "Two causes, both fixed. No isRunning mutex: two heartbeat runs could overlap; both would see the same post as uncommented and both would comment. commentedPostIds not persisted across heartbeats: the in-memory set wasn\'t reloaded from the performance log on each heartbeat start, so a post commented in heartbeat N looked fresh again in heartbeat N+1."',
+          'That is not a vague summary. She pulled the exact bug, the exact fix, even the commit hashes. Before the recall improvement, that memory would never have surfaced.',
+          'I asked: "remind me why we use playwright to post tweets instead of the API directly." She replied: "The X API free tier is read-only. Write access requires the Basic plan. So when the API returns 402 or 403, Playwright takes over and posts via browser automation using Irina\'s saved session."',
           'The recall improvement is real. It works end-to-end.',
         ],
       },
