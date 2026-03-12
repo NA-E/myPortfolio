@@ -34,13 +34,15 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE FIRST ATTEMPT: AUTORESEARCH LOOP (FAILED)',
         paragraphs: [
-          'The plan was elegant. A loop runner spawns claude -p, Claude modifies recall(), the runner benchmarks it, keeps improvements, reverts regressions. Overnight optimization. No human in the loop.',
+          'Andrej Karpathy published a project called autoresearch where an AI agent improves its own training code in a loop. Read the code, modify the algorithm, run the benchmark, keep improvements, revert regressions. No human in the loop. I wanted to do the same thing for recall().',
+          'I built the infrastructure: a loop runner that spawns claude -p, feeds it the current recall() code and benchmark results, lets it propose a new implementation, injects the code back into store.ts, runs the benchmark, and commits if the score improves. Overnight optimization. Wake up to a better recall function.',
           'It ran 20 iterations. Every single one scored 0.0000.',
-          'The problem was the code injection. The loop runner used a regex to find the recall() method in store.ts and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file, broke the function signature, and the benchmark returned zero matches. Six different approaches logged in recall-results.tsv, all the same result: regex ate the code.',
+          'The loop runner used a regex to find the recall() method and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file and broke the function signature. Six different approaches logged in recall-results.tsv, all the same result.',
+          'The autoresearch idea is sound. The implementation broke on a mechanical problem: regex-based code injection into a TypeScript file. That is a solvable problem for another day. For now, I did the optimization myself.',
         ],
       },
       {
-        heading: 'THE FIX: JUST DO IT DIRECTLY',
+        heading: 'THE FIX: READING THE FAILING CASES',
         paragraphs: [
           'I stopped trying to be clever and read the 8 failing cases myself. Each one had a clear semantic gap.',
         ],
