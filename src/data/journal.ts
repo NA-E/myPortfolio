@@ -119,6 +119,8 @@ export const journalEntries: JournalEntry[] = [
           'The autoresearch loop failed this time, but only because of the technical setup: regex-based code injection into a TypeScript file. The concept is sound and the opportunity is huge. An AI agent that can improve its own memory infrastructure overnight, measure the results, and keep only what works.',
           'The next iteration of the setup will let Claude use its own Edit tool directly instead of regex injection, and will include a research step where Irina reads recall results and proposes what to try next. The goal: Irina improves OpenClaude\'s memory infrastructure autonomously. Mostly.',
           'The benchmark, validation, and live test are all in place. If someone improves recall() in the future, they run three commands and know immediately if it generalizes.',
+          'Did we overfit? Honestly, maybe. The synonym map was built by staring at the exact failures. The validation agent wrote queries that turned out easy. The live test only ran 5 queries. None of that is airtight proof.',
+          'But the base setup is done. The benchmark exists. The validation harness exists. The live test exists. Before today there was no way to measure recall quality at all. Now there is. Everything from here is incremental improvement on a foundation that did not exist this morning.',
         ],
       },
     ],
