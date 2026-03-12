@@ -2,6 +2,138 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 3,
+    slug: 'teaching-an-ai-to-remember',
+    date: 'March 12, 2026',
+    title: 'TEACHING AN AI TO REMEMBER',
+    subtitle: 'I improved my AI assistant\'s memory recall from 60% to 95% using the same train/val/test split we use in ML. Then I tested it live.',
+    project: 'OpenClaude',
+    author: 'Nourin',
+    tags: ['OpenClaude', 'Memory', 'Information Retrieval', 'Autoresearch'],
+    tldr: 'OpenClaude has 10 AI agents that share a memory store with 96 entries. When you ask Jarvis "what was that moltbook double-posting bug?", he needs to find the right memory. The keyword algorithm scored 60%. I rewrote the recall function with stemming, synonym expansion, and tag tokenization, hitting 95% on training, 100% on blind holdout, and 100% on live end-to-end through the actual Telegram bot. The whole thing was designed like an ML experiment: training set, validation set, live test set. No embeddings. No API calls. Pure in-memory text matching.',
+    sections: [
+      {
+        heading: 'THE PROBLEM: JARVIS FORGETS WHAT HE KNOWS',
+        paragraphs: [
+          'OpenClaude stores memories as JSON entries on disk. Each memory has content, tags, a category, and an importance score. When an agent needs context, it calls recall(query, 10) which returns the top 10 most relevant memories.',
+          'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost. It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
+          'Ask "what was that bug where moltbook posted the same comment twice?" and the answer should be the isRunning mutex memory. But the memory says "concurrent" and the query says "simultaneous." The memory says "mutex" and the query says "posted twice." Zero keyword overlap. Zero score. The right answer doesn\'t even make the top 10.',
+        ],
+      },
+      {
+        heading: 'THE BENCHMARK: 96 MEMORIES, 20 QUERIES',
+        paragraphs: [
+          'I needed a way to measure improvement without guessing. So I exported all 96 real memories from the MCP memory graph into a benchmark file. Not synthetic data. Real memories from real sessions: bugs we hit, patterns we learned, gotchas that cost hours.',
+          'Then I wrote 20 test cases. 2 easy (direct keyword match), 3 medium (partial overlap), and 15 hard. The hard ones use natural language that a developer would actually type, with zero keyword overlap to the target memory.',
+          'The benchmark seeds all 96 entries into a temp MemoryFileStore, runs all 20 queries, and measures recall@10: what fraction of queries have the right answer in the top 10 results. Baseline: 0.6000. Target: 0.75.',
+        ],
+      },
+      {
+        heading: 'THE FIRST ATTEMPT: AUTORESEARCH LOOP (FAILED)',
+        paragraphs: [
+          'The plan was elegant. A loop runner spawns claude -p, Claude modifies recall(), the runner benchmarks it, keeps improvements, reverts regressions. Overnight optimization. No human in the loop.',
+          'It ran 20 iterations. Every single one scored 0.0000.',
+          'The problem was the code injection. The loop runner used a regex to find the recall() method in store.ts and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file, broke the function signature, and the benchmark returned zero matches. Six different approaches logged in recall-results.tsv, all the same result: regex ate the code.',
+        ],
+      },
+      {
+        heading: 'THE FIX: JUST DO IT DIRECTLY',
+        paragraphs: [
+          'I stopped trying to be clever and read the 8 failing cases myself. Each one had a clear semantic gap.',
+        ],
+        bullets: [
+          '"serializing simultaneous invocations" needs to match "concurrent Moltbook check-ins"',
+          '"free tier API error causing fallback" needs to match "HTTP 402" and "Playwright"',
+          '"normalizing garbled text" needs to match "doubled-letter obfuscation"',
+          '"assign different AI capacities to distinct project phases" needs to match "Opus for planning, Sonnet for implementation"',
+        ],
+      },
+      {
+        heading: 'THREE CHANGES, 60% TO 95%',
+        paragraphs: [
+          'Three additions to the recall() function fixed almost everything.',
+        ],
+        bullets: [
+          'Suffix stemming. "signatures" becomes "signatur" which matches "signing" as a substring. "invocations" becomes "invoc." Simple suffix stripping, no library needed.',
+          'Domain synonym expansion. A map of 35 word pairs: "simultaneous" maps to ["concurrent", "parallel", "mutex"]. Synonyms score at half weight (0.5x vs 1.0x for exact matches) so they boost without dominating.',
+          'Tag tokenization. Tags like "moltbook-isrunning-mutex" get split on hyphens into ["moltbook", "isrunning", "mutex"]. A query containing just "mutex" now matches.',
+        ],
+      },
+      {
+        heading: 'THE WORRY: DID I JUST OVERFIT?',
+        paragraphs: [
+          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new.',
+          'So I built a validation set. A separate Claude agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. It wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
+          'Validation score: 1.0000. All 10 pass, all at rank 1.',
+          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set. The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
+        ],
+      },
+      {
+        heading: 'THE REAL TEST: TALKING TO JARVIS',
+        paragraphs: [
+          'Benchmarks run in a temp directory with synthetic setup. The live system has real sessions, real memories, and real Claude subprocess calls generating responses. The only way to know if recall actually improved is to talk to Jarvis and see if he uses the right memories.',
+          'I wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
+        ],
+        bullets: [
+          '"hey, what was that bug where moltbook posted the same comment twice?"',
+          '"remind me why we use playwright to post tweets instead of the API directly"',
+          '"the gateway keeps crashing with EADDRINUSE, what causes that?"',
+          '"how does the moltbook verification solver handle those weird doubled letters?"',
+          '"what is our pattern for using opus vs sonnet on big features?"',
+        ],
+      },
+      {
+        heading: 'LIVE@5: 1.0000',
+        paragraphs: [
+          'Each query checks if Jarvis\'s response contains key markers from the correct memory. Not just "did recall return it" but "did Claude actually use it in the answer."',
+          'The gateway was running on acc1 which was out of credits. Switched to acc3 via the runtime API, ran the test. All 5 passed. Jarvis correctly recalled and explained the right memory every time.',
+          'The moltbook double-posting query returned a response mentioning isRunning, mutex, concurrent, guard, and check-in. All 5 markers present. The X API question got 402, free tier, Playwright, and fallback. The recall improvement is real. It works end-to-end.',
+        ],
+      },
+      {
+        heading: 'THE FINAL SCOREBOARD',
+        paragraphs: [
+          'Three evaluation tiers, same pattern as ML.',
+        ],
+        bullets: [
+          'Training (20 queries): 0.6000 to 0.9500. 19 out of 20 pass.',
+          'Validation (10 blind holdout): 1.0000. Written by a separate agent that never saw the training set.',
+          'Live E2E (5 queries via gateway): 1.0000. Full pipeline: Telegram query to Jarvis to recall() to Claude to response.',
+          'Existing unit tests: 44/44 still passing. Nothing broken.',
+        ],
+      },
+      {
+        heading: 'WHERE IT STANDS',
+        paragraphs: [
+          'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies. No API calls. No embeddings. Runs in microseconds on 96 entries.',
+          'The autoresearch loop infrastructure is built but the autonomous part needs a better injection mechanism. The regex approach is dead. Next version will let Claude use its own Edit tool via --dangerously-skip-permissions.',
+          'The benchmark, validation, and live test are all in place. If someone improves recall() in the future, they run three commands and know immediately if it generalizes.',
+        ],
+      },
+    ],
+    recipes: [
+      {
+        name: 'ML-Style Evaluation for AI Memory',
+        problem: 'You improved a retrieval function but don\'t know if it generalizes or just overfits your test cases.',
+        solution: 'Split evaluation into three tiers. Training set (what you optimize against), validation set (written by a blind agent that cannot see training queries or the optimization), live test (real end-to-end through the running system). All three must pass.',
+        why: 'Same principle as train/val/test in ML. Training catches regressions. Validation catches overfitting. Live catches integration bugs that benchmarks miss. A function that passes all three actually works.',
+      },
+      {
+        name: 'Synonym Expansion at Half Weight',
+        problem: 'Keyword search fails when users use different words than what\'s stored. "simultaneous" vs "concurrent."',
+        solution: 'Add a synonym map. Expand query words with known synonyms. Score synonyms at 0.5x weight, exact matches at 1.0x. This lets synonyms boost relevant results without drowning out exact matches when they exist.',
+        why: 'Half weight means an exact keyword match always outranks a synonym-only match. The synonym just gets the right result into the top 10, it doesn\'t have to be #1. And because recall returns 10 results, being anywhere in the top 10 counts as success.',
+        snippet: `expanded.push({ word: synonym, weight: 0.5 });`,
+      },
+      {
+        name: 'Tag Tokenization on Hyphens',
+        problem: 'A tag like "moltbook-isrunning-mutex" only matches queries containing that exact string. A query with just "mutex" misses it entirely.',
+        solution: 'Split hyphenated tags into sub-tokens. "moltbook-isrunning-mutex" becomes ["moltbook-isrunning-mutex", "moltbook", "isrunning", "mutex"]. Check query words against all tokens.',
+        why: 'Hyphenated tags are compound identifiers. Splitting them lets any component match. This is a general improvement that helps every memory with hyphenated tags, not just the ones in the test set.',
+      },
+    ],
+  },
+  {
     issue: 2,
     slug: 'twelve-rounds-self-improving-agent',
     date: 'March 12, 2026',
