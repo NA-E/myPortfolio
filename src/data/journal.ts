@@ -2,6 +2,83 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 4,
+    slug: '1292-sessions-what-the-data-says',
+    date: 'March 31, 2026',
+    title: '1,292 CLAUDE CODE SESSIONS. 18% SUCCESS RATE.',
+    subtitle: 'Six weeks of logged Claude Code sessions put a number on something I suspected: most of the work was failing, and it was failing the same way.',
+    project: 'Claude Code Session Analysis',
+    author: 'Nourin',
+    tags: ['Claude Code', 'Workflow', 'Productivity', 'Data', 'Task Management'],
+    tldr: 'Between December 24, 2025 and February 5, 2026, I ran 1,292 Claude Code sessions and scored 131 of them against a stated goal. 24 fully achieved it — 18%. The other 82% mostly failed the same way: Claude started coding before the approach was confirmed.',
+    sections: [
+    {
+      heading: 'THE NUMBERS',
+      paragraphs: [
+        '1,292 Claude Code sessions. 6 weeks. I scored 131 of them against a stated goal — I wrote down what the session was supposed to produce before it started, then checked whether it actually did.',
+        '\'Fully achieved\' means the goal was stated, the work was done, and I confirmed it was done. Not mostly done. Not done enough. Done. 24 sessions hit that bar.',
+        'The other 107 split three ways. 64 hit a wrong approach: Claude started building the wrong thing, and either I caught it late or not at all. 24 involved rejected actions — Claude tried something I had to stop. The rest ran out of context or time before finishing.',
+      ],
+    },
+    {
+      heading: 'WHAT 6,000 CLAUDE CODE TASK CALLS AND 8,000 BASH RUNS LOOK LIKE',
+      paragraphs: [
+        'Across all 1,292 sessions, Claude ran Bash about 8,000 times, Read about 7,900 times, and Edit about 5,200 times. It created or updated tasks over 6,000 times.',
+        'The Read:Edit ratio is a signal. When a session is working, Claude reads more than it edits. It\'s checking existing code, building context, understanding the shape of the problem before touching anything.',
+        'When Edit outpaces Read in the first 20% of a session, something\'s off. Claude is writing before it\'s understood the situation. It\'s guessing. The sessions that went sideways almost always showed this pattern early.',
+      ],
+    },
+    {
+      heading: 'WHERE 64 WRONG APPROACHES CAME FROM',
+      paragraphs: [
+        '64 wrong-approach incidents out of 131 scored sessions — 49%. Nearly all of them had the same root: I sent the first message, Claude started coding, and the code was solving the wrong problem.',
+        'Compound requests made it worse. \'Build the dashboard, add the filters, and make sure the export works\' — Claude focuses on the dashboard, approximates the filters, and the export gets whatever context is left. That\'s not a flaw in Claude. Attention doesn\'t split cleanly across three goals in one session.',
+        'One session worked specifically because I didn\'t skip the planning step. The LinkedIn content pipeline UI — I required a wireframe in plain text before any code ran. I confirmed it. Then Claude started. That session finished. The ones where I skipped that step usually didn\'t.',
+        'A wrong-approach session costs 20 to 40 minutes. You notice the problem, try to redirect, realize the context is too tangled to fix, and restart. Sometimes the work is recoverable. The time isn\'t.',
+      ],
+    },
+    {
+      heading: 'WHAT THE 24 SUCCESSFUL SESSIONS DID',
+      paragraphs: [
+        'The sessions that fully succeeded weren\'t more ambitious. They were more constrained.',
+        'Each one had a single objective. Not \'build the dashboard and the filters\' — just \'build the dashboard.\' The filters get their own session. No compound requests made it into these sessions.',
+        'Each one started with a numbered plan. Claude listed what it was going to do, in order. I confirmed it before any code ran. That step takes two minutes. It consistently prevented the wrong-approach restarts that cost 20 to 40.',
+        'Verification happened explicitly at the end. Not \'looks good\' — I ran the output against the original goal and gave a yes or a no. Sessions that ended with \'I think it\'s done\' had a much lower full-achieve rate.',
+      ],
+    },
+    {
+      heading: 'WHERE THIS ACTUALLY STANDS',
+      paragraphs: [
+        'The failure rate is still high. After running this analysis, I added a CLAUDE.md rule requiring a numbered plan before any code runs. The wrong-approach count dropped. Compound requests still slip through when I\'m moving fast.',
+        'Memory failures are a separate category I didn\'t count here — that problem and its fix are in Teaching an AI to Remember. The self-improvement loop in 12 Rounds She Improved Herself is a different pattern entirely: that one worked because each session had exactly one objective.',
+        '18% is a bad number. It\'s also the honest one.',
+      ],
+    }
+    ],
+    recipes: [
+    {
+      name: 'Pre-Session Plan Gate',
+      problem: 'Claude starts coding before the approach is confirmed. You realize the wrong thing is being built 20-40 minutes in. Context is tangled, restart required.',
+      solution: 'Add this to CLAUDE.md: \'Always show a numbered plan before writing any code. Wait for explicit confirmation before proceeding.\' First message from Claude = the plan. No code until you confirm.',
+      why: '64 of 131 scored sessions (49%) hit a wrong-approach incident. Almost all trace to this skipped step. Two minutes of planning prevents the 20-40 minute restart.',
+      snippet: `// In CLAUDE.md:
+"Always show a numbered plan before writing any code. Wait for explicit confirmation before proceeding."`,
+    },
+    {
+      name: 'Single-Objective Session Split',
+      problem: 'Compound requests (\'build X, add Y, fix Z\') divide Claude\'s attention. It optimizes for the first goal, approximates the second, and the third gets whatever context remains.',
+      solution: 'One session, one goal. Split compound requests before the session starts. \'Build the dashboard\' is a session. \'Add the filters\' is the next one.',
+      why: 'Compound requests are the number one trigger for wrong-approach incidents in the data. A single objective removes the ambiguity that causes Claude to guess at scope.',
+    },
+    {
+      name: 'Read:Edit Ratio Check',
+      problem: 'No early signal that a session is going sideways — you find out 40 minutes in when the work is wrong.',
+      solution: 'Watch the tool calls. If Edit outpaces Read in the first 20% of a session, stop and ask Claude to re-read the plan before continuing.',
+      why: 'Healthy sessions are Read-heavy — Claude understands before it acts. Edit-heavy early means it\'s guessing. Catching this at 5 minutes costs nothing. Catching it at 40 minutes costs the session.',
+    }
+    ],
+  },
+  {
     issue: 3,
     slug: 'teaching-an-ai-to-remember',
     date: 'March 12, 2026',
