@@ -2,11 +2,88 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 4,
+    slug: '1292-sessions-what-the-data-says',
+    date: 'March 31, 2026',
+    title: '1,292 CLAUDE CODE SESSIONS. 18% SUCCESS RATE.',
+    subtitle: 'Six weeks of logged Claude Code sessions put a number on something I suspected: most of the work was failing, and it was failing the same way.',
+    project: 'Claude Code Session Analysis',
+    author: 'Nourin',
+    tags: ['Claude Code', 'Workflow', 'Productivity', 'Data', 'Task Management'],
+    tldr: 'Between December 24, 2025 and February 5, 2026, I ran 1,292 Claude Code sessions and scored 131 of them against a stated goal. 24 fully achieved it — 18%. The other 82% mostly failed the same way: Claude started coding before the approach was confirmed.',
+    sections: [
+    {
+      heading: 'THE NUMBERS',
+      paragraphs: [
+        '1,292 Claude Code sessions. 6 weeks. I scored 131 of them against a stated goal — I wrote down what the session was supposed to produce before it started, then checked whether it actually did.',
+        '\'Fully achieved\' means the goal was stated, the work was done, and I confirmed it was done. Not mostly done. Not done enough. Done. 24 sessions hit that bar.',
+        'The other 107 split three ways. 64 hit a wrong approach: Claude started building the wrong thing, and either I caught it late or not at all. 24 involved rejected actions — Claude tried something I had to stop. The rest ran out of context or time before finishing.',
+      ],
+    },
+    {
+      heading: 'WHAT 6,000 CLAUDE CODE TASK CALLS AND 8,000 BASH RUNS LOOK LIKE',
+      paragraphs: [
+        'Across all 1,292 sessions, Claude ran Bash about 8,000 times, Read about 7,900 times, and Edit about 5,200 times. It created or updated tasks over 6,000 times.',
+        'The Read:Edit ratio is a signal. When a session is working, Claude reads more than it edits. It\'s checking existing code, building context, understanding the shape of the problem before touching anything.',
+        'When Edit outpaces Read in the first 20% of a session, something\'s off. Claude is writing before it\'s understood the situation. It\'s guessing. The sessions that went sideways almost always showed this pattern early.',
+      ],
+    },
+    {
+      heading: 'WHERE 64 WRONG APPROACHES CAME FROM',
+      paragraphs: [
+        '64 wrong-approach incidents out of 131 scored sessions — 49%. Nearly all of them had the same root: I sent the first message, Claude started coding, and the code was solving the wrong problem.',
+        'Compound requests made it worse. \'Build the dashboard, add the filters, and make sure the export works\' — Claude focuses on the dashboard, approximates the filters, and the export gets whatever context is left. That\'s not a flaw in Claude. Attention doesn\'t split cleanly across three goals in one session.',
+        'One session worked specifically because I didn\'t skip the planning step. The LinkedIn content pipeline UI — I required a wireframe in plain text before any code ran. I confirmed it. Then Claude started. That session finished. The ones where I skipped that step usually didn\'t.',
+        'A wrong-approach session costs 20 to 40 minutes. You notice the problem, try to redirect, realize the context is too tangled to fix, and restart. Sometimes the work is recoverable. The time isn\'t.',
+      ],
+    },
+    {
+      heading: 'WHAT THE 24 SUCCESSFUL SESSIONS DID',
+      paragraphs: [
+        'The sessions that fully succeeded weren\'t more ambitious. They were more constrained.',
+        'Each one had a single objective. Not \'build the dashboard and the filters\' — just \'build the dashboard.\' The filters get their own session. No compound requests made it into these sessions.',
+        'Each one started with a numbered plan. Claude listed what it was going to do, in order. I confirmed it before any code ran. That step takes two minutes. It consistently prevented the wrong-approach restarts that cost 20 to 40.',
+        'Verification happened explicitly at the end. Not \'looks good\' — I ran the output against the original goal and gave a yes or a no. Sessions that ended with \'I think it\'s done\' had a much lower full-achieve rate.',
+      ],
+    },
+    {
+      heading: 'WHERE THIS ACTUALLY STANDS',
+      paragraphs: [
+        'The failure rate is still high. After running this analysis, I added a CLAUDE.md rule requiring a numbered plan before any code runs. The wrong-approach count dropped. Compound requests still slip through when I\'m moving fast.',
+        'Memory failures are a separate category I didn\'t count here — that problem and its fix are in Teaching an AI to Remember. The self-improvement loop in 12 Rounds She Improved Herself is a different pattern entirely: that one worked because each session had exactly one objective.',
+        '18% is a bad number. It\'s also the honest one.',
+      ],
+    }
+    ],
+    recipes: [
+    {
+      name: 'Pre-Session Plan Gate',
+      problem: 'Claude starts coding before the approach is confirmed. You realize the wrong thing is being built 20-40 minutes in. Context is tangled, restart required.',
+      solution: 'Add this to CLAUDE.md: \'Always show a numbered plan before writing any code. Wait for explicit confirmation before proceeding.\' First message from Claude = the plan. No code until you confirm.',
+      why: '64 of 131 scored sessions (49%) hit a wrong-approach incident. Almost all trace to this skipped step. Two minutes of planning prevents the 20-40 minute restart.',
+      snippet: `// In CLAUDE.md:
+"Always show a numbered plan before writing any code. Wait for explicit confirmation before proceeding."`,
+    },
+    {
+      name: 'Single-Objective Session Split',
+      problem: 'Compound requests (\'build X, add Y, fix Z\') divide Claude\'s attention. It optimizes for the first goal, approximates the second, and the third gets whatever context remains.',
+      solution: 'One session, one goal. Split compound requests before the session starts. \'Build the dashboard\' is a session. \'Add the filters\' is the next one.',
+      why: 'Compound requests are the number one trigger for wrong-approach incidents in the data. A single objective removes the ambiguity that causes Claude to guess at scope.',
+    },
+    {
+      name: 'Read:Edit Ratio Check',
+      problem: 'No early signal that a session is going sideways — you find out 40 minutes in when the work is wrong.',
+      solution: 'Watch the tool calls. If Edit outpaces Read in the first 20% of a session, stop and ask Claude to re-read the plan before continuing.',
+      why: 'Healthy sessions are Read-heavy — Claude understands before it acts. Edit-heavy early means it\'s guessing. Catching this at 5 minutes costs nothing. Catching it at 40 minutes costs the session.',
+    }
+    ],
+  },
+  {
     issue: 3,
     slug: 'teaching-an-ai-to-remember',
     date: 'March 12, 2026',
     title: 'TEACHING AN AI TO REMEMBER',
-    subtitle: 'I improved my AI assistant\'s memory recall from 60% to 95% using the same train/val/test split we use in ML. Then I tested it live.',
+    subtitle: 'We improved my AI assistant\'s memory recall from 60% to 95% using the same train/val/test split we use in ML. Then we tested it live.',
     project: 'OpenClaude',
     author: 'Nourin',
     tags: ['OpenClaude', 'Memory', 'Information Retrieval', 'Autoresearch'],
@@ -15,10 +92,13 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE PROBLEM: IRINA FORGETS WHAT SHE KNOWS',
         paragraphs: [
-          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls. Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks.',
+          'OpenClaude is my personal AI assistant project. 10 agents running locally on my machine, no Anthropic API key, powered by Claude Pro through subprocess calls.',
+          'Irina is the agent I talk to most. She lives on Telegram, posts on Moltbook (a social platform for AI agents), and handles day-to-day tasks.',
           'She has accumulated 96 memories across three disconnected systems: an MCP knowledge graph that Claude Code maintains automatically, a JSON file store that OpenClaude\'s agents use for keyword recall, and per-agent working memory files (daily notes, task state). The problem was the middle one. The recall function.',
-          'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost. It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
-          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?" She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard.',
+          'The original algorithm was dead simple. Split the query into words, check if each word appears as a substring in the memory content or tags, multiply by importance, add a recency boost.',
+          'It worked for obvious queries like "playwright mcp browser automation." It completely failed for natural ones.',
+          'Here is what that looks like in practice. I message Irina on Telegram: "hey, what was that bug where moltbook posted the same comment twice?"',
+          'She has a memory about this. It describes how two concurrent check-ins can double-comment and the fix is a mutex guard.',
           'But the memory uses the word "concurrent" and my question uses "twice." The memory says "mutex" and I said "posted the same comment." Zero keyword overlap between my question and the answer.',
           'The recall function scores it at zero. It does not make the top 10 results. Irina responds with something generic because the relevant memory was never surfaced to her.',
         ],
@@ -34,17 +114,20 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE FIRST ATTEMPT: AUTORESEARCH LOOP (FAILED)',
         paragraphs: [
-          'Andrej Karpathy published a project called autoresearch where an AI agent improves its own training code in a loop. Read the code, modify the algorithm, run the benchmark, keep improvements, revert regressions. No human in the loop. I wanted to do the same thing for recall().',
-          'I built the infrastructure: a loop runner that spawns claude -p, feeds it the current recall() code and benchmark results, lets it propose a new implementation, injects the code back into store.ts, runs the benchmark, and commits if the score improves. Overnight optimization. Wake up to a better recall function.',
+          'Andrej Karpathy published a project called autoresearch where an AI agent improves its own training code in a loop. Read the code, modify the algorithm, run the benchmark, keep improvements, revert regressions. No human in the loop.',
+          'I wanted to do the same thing for recall().',
+          'We built the infrastructure: a loop runner that spawns claude -p, feeds it the current recall() code and benchmark results, lets it propose a new implementation, injects the code back into store.ts, runs the benchmark, and commits if the score improves. Overnight optimization. Wake up to a better recall function.',
           'It ran 20 iterations. Every single one scored 0.0000.',
-          'The loop runner used a regex to find the recall() method and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file and broke the function signature. Six different approaches logged in recall-results.tsv, all the same result.',
-          'The autoresearch idea is sound. The implementation broke on a mechanical problem: regex-based code injection into a TypeScript file. That is a solvable problem for another day. For now, I did the optimization myself.',
+          'The loop runner used a regex to find the recall() method and replace it with Claude\'s output. The regex was fragile. Every iteration corrupted the file and broke the function signature.',
+          'Six different approaches logged in recall-results.tsv, all the same result.',
+          'The autoresearch idea is sound. The implementation broke on a mechanical problem: regex-based code injection into a TypeScript file.',
+          'That is a solvable problem for another day. For now, we did the optimization together.',
         ],
       },
       {
         heading: 'THE FIX: READING THE FAILING CASES',
         paragraphs: [
-          'While I was debugging the loop runner, Claude (the one helping me build all this) pointed out something obvious. The 8 failing cases were right there in the benchmark output. We could just read them.',
+          'While we were debugging the loop runner, Claude pointed out something obvious. The 8 failing cases were right there in the benchmark output. We could just read them.',
           'We pulled up each failing query and its target memory side by side. The pattern was immediately clear. Every failure was the same kind of gap: the query used natural language and the memory used technical jargon.',
         ],
         bullets: [
@@ -68,10 +151,14 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'THE WORRY: DID WE JUST OVERFIT?',
         paragraphs: [
-          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new. I raised this with Claude.',
-          'The answer was to build a proper validation set. Same idea as holdout data in ML. Claude spawned a separate agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map. That blind agent wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
+          'The synonym map was hand-picked to fix the exact 8 failing cases. That is textbook overfitting. A model that memorizes the training set and fails on anything new.',
+          'I raised this with Claude.',
+          'The answer was to build a proper validation set. Same idea as holdout data in ML.',
+          'Claude spawned a separate agent that could only see the 96 memory entries. Not the 20 training queries. Not the synonym map.',
+          'That blind agent wrote 10 new test cases: 3 easy, 3 medium, 4 hard.',
           'Validation score: 1.0000. All 10 pass, all at rank 1.',
-          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements. They help every query, not just the ones in the training set.',
+          'Suspicious? Maybe. But the stemming and tag tokenization are general improvements.',
+          'They help every query, not just the ones in the training set.',
           'The synonym map might be irrelevant for these new queries. If the general improvements carry the weight, that means they actually generalize. Which is the point.',
         ],
       },
@@ -79,7 +166,7 @@ export const journalEntries: JournalEntry[] = [
         heading: 'THE REAL TEST: TALKING TO IRINA',
         paragraphs: [
           'Benchmarks run in a temp directory with synthetic setup. The live system has real sessions, real memories, and real Claude subprocess calls generating responses. The only way to know if recall actually improved is to talk to Irina and see if she uses the right memories.',
-          'I wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
+          'Claude wrote 5 natural conversation queries. Things you\'d actually type in Telegram.',
         ],
         bullets: [
           '"hey, what was that bug where moltbook posted the same comment twice?"',
@@ -115,12 +202,15 @@ export const journalEntries: JournalEntry[] = [
       {
         heading: 'WHERE IT STANDS',
         paragraphs: [
-          'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies. No API calls. No embeddings. Runs in microseconds on 96 entries.',
+          'The recall function went from keyword-only to keyword + stemming + synonyms + tag tokenization. No external dependencies, no API calls, no embeddings. Runs in microseconds on 96 entries.',
           'The autoresearch loop failed this time, but only because of the technical setup: regex-based code injection into a TypeScript file. The concept is sound and the opportunity is huge. An AI agent that can improve its own memory infrastructure overnight, measure the results, and keep only what works.',
           'The next iteration of the setup will let Claude use its own Edit tool directly instead of regex injection, and will include a research step where Irina reads recall results and proposes what to try next. The goal: Irina improves OpenClaude\'s memory infrastructure autonomously. Mostly.',
           'The benchmark, validation, and live test are all in place. If someone improves recall() in the future, they run three commands and know immediately if it generalizes.',
-          'Did we overfit? Honestly, maybe. The synonym map was built by staring at the exact failures. The validation agent wrote queries that turned out easy. The live test only ran 5 queries. None of that is airtight proof.',
-          'But the base setup is done. The benchmark exists. The validation harness exists. The live test exists. Before today there was no way to measure recall quality at all. Now there is. Everything from here is incremental improvement on a foundation that did not exist this morning.',
+          'Did we overfit? Honestly, maybe. The synonym map was built by staring at the exact failures.',
+          'The validation agent wrote queries that turned out easy. The live test only ran 5 queries. None of that is airtight proof.',
+          'But the base setup is done. The benchmark exists, the validation harness exists, the live test exists.',
+          'Before today there was no way to measure recall quality at all. Now there is.',
+          'Everything from here is incremental improvement on a foundation that did not exist this morning.',
         ],
       },
     ],
