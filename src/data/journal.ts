@@ -2,6 +2,205 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 5,
+    slug: 'claude-code-week-21-2026',
+    date: 'May 22, 2026',
+    title: 'FIVE CLAUDE CODE MOVES THAT BEAT VIBE CODING',
+    subtitle: 'How to use planning mode, model routing, sub-agents, AFK loops, and Playwright to ship faster.',
+    project: 'Field Notes',
+    author: 'Nourin',
+    tags: ['Claude Code', 'Workflow', 'Planning Mode', 'Sub-Agents', 'Skills'],
+    tldr: 'Vibe coding feels fast but costs you on hour two. Five habits separate pros from beginners: plan mode, model routing, sub-agents for thinking, AFK loops, and browser-verified QA. Each one is a paste-ready recipe at the bottom.',
+    sections: [
+      {
+        heading: "WHAT YOU'LL LEARN",
+        paragraphs: [],
+        bullets: [
+          'Planning mode is not optional. Skip it for changes over 10 lines and you get architectural drift. Use it and Claude reads your codebase before writing a single line.',
+          'Routing models by task is the new normal. Opus 4.5 for refactors. Sonnet 4.5 for small edits. GPT-5.2 via Codex CLI when Opus gets stuck.',
+          'Sub-agents are for research, not parallel edits. Two agents editing the same codebase will not mesh. Use them to read, think, and gather context.',
+          'AFK loops are the new ceiling. Plan during the day. Fire a Ralph loop at 5pm. Come back to a finished feature.',
+          'Give Claude eyes through the browser. Playwright closes the verification loop so you stop guessing whether it actually worked.',
+        ],
+      },
+      {
+        heading: 'WHY THIS MATTERS',
+        paragraphs: [
+          'Vibe coding feels fast at first. You skip the plan, type into Claude, and watch code pour out.',
+          'Then two hours in, you realize Claude built the wrong thing. That hour was free. The next four are not.',
+        ],
+      },
+      {
+        heading: "THE PLANNING STEP YOU CAN'T SKIP",
+        paragraphs: [
+          'Plan mode in Claude Code is not just "make a plan before coding." It spins up explore sub-agents that read your codebase first.',
+          'They find your existing patterns. They feed those patterns into the plan.',
+          'This is why agentic grep beats vector search. Agentic grep is when Claude uses grep itself to find patterns in your repo. Vector search is when an indexer chunks your code into embeddings and pulls them at query time. The grep approach is grounded in your actual files, not in a stale index.',
+          'If a senior dev told you to "make a plan first," they were right but vague. The reason it works in Claude Code is sub-agents. The plan you get is grounded in your code, not in Claude\'s guess about your code.',
+          'Use plan mode for any change touching more than 10 to 15 lines.',
+        ],
+      },
+      {
+        heading: 'MODEL ROUTING. PICK THE RIGHT BRAIN.',
+        paragraphs: [
+          'No single model is best. Pros route by task type.',
+          'Opus 4.5 handles 70 to 80 percent of work. Use it for big refactors, clean focused code, and multi-file changes.',
+          'Sonnet 4.5 is for small surgical edits like UI tweaks, code review, and change logs.',
+          'GPT-5.2 through Codex CLI is the unblock model. When Opus gets stuck going in circles, switch to Codex with high reasoning effort.',
+          'The training bias is different. It often finds the solution Opus missed.',
+          'Gemini 3 Pro is best for design work and architecture planning on large systems. Haiku 4.5 is for fast questions, quick explanations, and tiny precise edits in known files.',
+        ],
+      },
+      {
+        heading: 'SUB-AGENTS ARE FOR THINKING, NOT EDITING',
+        paragraphs: [
+          "A pattern people tried last year: assign one sub-agent for frontend, one for backend, run them in parallel. Don't do this.",
+          "The output doesn't mesh. Each sub-agent misinterprets the spec a little differently. You spend more time merging than you would have spent letting one agent do it.",
+          'What sub-agents are actually good for is isolated research with their own context window. Spin up three sub-agents to look at the same bug from different angles.',
+          'Get one to search docs online. Get another to read related code. Each one returns distilled context to the main session.',
+          "The exception is many small well-defined edits across separate projects. Translating 500 hard-coded strings into i18n keys is a good fit. Sub-agents per file or per project work because the edits don't overlap.",
+          'i18n stands for internationalization. It is the work of making your app support multiple languages.',
+        ],
+      },
+      {
+        heading: 'AFK LOOPS. WORK WHILE YOU SLEEP',
+        paragraphs: [
+          'The Ralph loop is the move here. Ralph stands for Repetitive Autonomous Loop for PRD Handling. PRD is a Product Requirements Doc, a detailed spec for what you want built.',
+          'Four steps:',
+        ],
+        bullets: [
+          'Use a "grill me" skill that interviews you with 20 to 40 questions about what you want to build. This replaces plan mode.',
+          'The skill writes a PRD and pushes it to GitHub as a single issue.',
+          'A second skill breaks that PRD into individual GitHub issues in dependency order.',
+          'The Ralph skill runs in a Docker sandbox, picks each issue in order, writes the code, runs tests, commits, then moves on.',
+        ],
+      },
+      {
+        heading: 'AFK LOOPS CONTINUED. THE AUTOPILOT INTERVIEW.',
+        paragraphs: [
+          'Docker is a container that isolates the running code from your machine. That isolation is why `--dangerously-skip-permissions` is safe inside it.',
+          'You spend the day shaping the PRD. You fire Ralph at 5pm. You come back hours later and the feature is done.',
+          'For people who feel uneasy about the grill-me interview, there is an autopilot version called shape. Claude answers the 20 to 40 questions itself based on reading your codebase.',
+          'You skim the doc, override the ones it got wrong, and proceed. 90 percent of its answers are right anyway.',
+        ],
+      },
+      {
+        heading: 'BROWSER CONTROL CHANGES EVERYTHING',
+        paragraphs: [
+          'Claude Code with Playwright stops guessing. Playwright is a tool that drives a real browser the way a person would.',
+          'It opens your app. It clicks through the flow. It captures screenshots at each step.',
+          "It reads the console logs too. You see real evidence, not Claude's word that things work.",
+          'The pattern: have Claude plan a 15-phase QA pass, capture screenshots for each phase, then read the console errors at the end. Feed those errors back as a fix list. Spin up sub-agents to fix each one.',
+          'Re-run the test pass to verify. This is the difference between "I think it works" and "here are 18 screenshots showing each path works."',
+          'It closes the verification loop without you ever opening the browser.',
+        ],
+      },
+      {
+        heading: "WHERE I'M LEARNING THIS FROM",
+        paragraphs: [],
+        bullets: [
+          '[My Claude Code Workflow for 2026](https://www.youtube.com/watch?v=sy65ARFI9Bg) by Ray Amjad. Covers multi-model routing, planning mode, sub-agent patterns, and the fork-session trick.',
+          '[From Idea to Production Code in Minutes](https://www.youtube.com/watch?v=YIfluAXBr2M) by Craig Hewitt. Walks through the Ralph loop and the four skills that make AFK coding work: grill-me, PRD, PRD-to-issues, and Ralph itself.',
+          '[8 Claude Code Skills Every Developer Needs in 2026](https://www.youtube.com/watch?v=Va-U1dqhwzk) by Eric Tech. Tour of Superpowers, skill creator, Playwright, the Obsidian skill, design-MD files, and the fix-ticket workflow.',
+        ],
+      },
+    ],
+    recipes: [
+      {
+        name: 'Plan Mode for Anything Over 10 Lines',
+        problem: "You start a 30-line change with a one-shot prompt. Claude writes it. Two of the patterns it uses don't match the rest of your codebase. You have architectural drift.",
+        solution: 'Trigger plan mode at the start of any change touching more than 10 lines. Let Claude spin up its explore sub-agents to read your codebase first.',
+        why: "Plan mode uses agentic grep across your repo. It finds the patterns you already have. The plan it generates is grounded in your code, not in Claude's guess about it.",
+        snippet: `# At the start of a session:
+Press Shift+Tab to toggle into plan mode.
+
+# Or launch with plan mode on:
+claude --plan`,
+      },
+      {
+        name: 'Multi-Model Router',
+        problem: 'You use Opus for everything. Some tasks would finish faster on Sonnet. Others get stuck on Opus and never finish.',
+        solution: 'Route by task. Opus 4.5 for big refactors and clean code. Sonnet 4.5 for small surgical edits. GPT-5.2 via Codex when Opus is stuck. Haiku for fast questions.',
+        why: 'Each model was trained differently. The biases that block one model can be exactly what lets another find the answer.',
+        snippet: `# Switch models mid-session:
+/model opus-4-5
+/model sonnet-4-5
+
+# Switch CLIs when stuck:
+codex --reasoning high "investigate why the dedup test fails"`,
+      },
+      {
+        name: 'Sub-Agents for Research, Not Edits',
+        problem: "You spin up 5 sub-agents to write a feature in parallel. The outputs don't mesh. You spend two hours merging contradictions.",
+        solution: 'Use sub-agents only for isolated research and context gathering. Spin up 3 to 4 to look at one bug from different angles. Have one search the web. Have another read the codebase. Main session integrates the findings.',
+        why: "Sub-agents have their own context windows. They isolate noise from the main session. They cannot collide on the same file because they don't edit.",
+        snippet: `"Spin up 3 sub-agents to investigate why the dedup check fails.
+One reads the dedup function and traces its callers.
+One searches our codebase for similar guard patterns.
+One searches the web for known dedup bugs.
+Return findings. I'll decide the fix."`,
+      },
+      {
+        name: 'Friday Night Ralph Loop',
+        problem: "You have a feature you want shipped by Monday. It needs 8 to 12 hours of focused work. You don't have that much focused time this week.",
+        solution: 'Spend two hours on Friday running grill-me to define a PRD. Run PRD-to-issues to break it into ordered tasks. Fire Ralph in a Docker sandbox at 5pm. Come back Saturday morning.',
+        why: "Docker isolates the chaos. Ralph runs TDD inline. Test-Driven Development means writing the test before the code so each commit is checked before moving on. If something fails, it doesn't propagate.",
+        snippet: `# One time setup:
+npx skills@latest install matt-pocock/grill-me matt-pocock/ralph
+
+# Friday afternoon:
+/grill-me build a weekly email summary feature for paid users
+# Answer 20 to 40 questions
+/PRD
+/PRD-to-issues
+
+# Friday 5pm in a fresh Docker shell:
+/ralph AFK <prd-issue-number>
+# Walk away. Come back Saturday.`,
+      },
+      {
+        name: 'Browser-Verified QA',
+        problem: 'You ship a fix. You think it works. Production tells you otherwise on Monday.',
+        solution: 'After any UI or flow change, have Claude run a Playwright pass through the affected paths. Capture screenshots for each step. Read the console for errors. Generate a QA report with image links.',
+        why: 'You stop relying on "Claude says it works." You see the evidence. Console errors surface issues that a passing test would have missed.',
+        snippet: `"Use Playwright CLI to test the new email digest flow.
+- log in as the test user
+- navigate to settings then email preferences
+- enable weekly digest
+- screenshot each step
+- read console for errors
+- output a QA report markdown with the screenshots
+If any console errors appear, list them with the trigger step."`,
+      },
+      {
+        name: 'Review the Shape of the Diff',
+        problem: 'You spend 20 minutes reviewing every line Claude wrote. Most of it is fine. You burn out on review fatigue and stop catching the real issues.',
+        solution: 'Look at the diff summary first. Which files changed? Roughly how many lines per file? Does the shape match what you expected? If yes, ship. If a surprise file appears or one file has 5x the changes you expected, read that part carefully.',
+        why: 'When plan mode was used and your CLAUDE.md is tight, the code is almost always correct. The shape signal is faster than line-by-line review and catches the real failures.',
+      },
+      {
+        name: 'CLAUDE.md Update Habit',
+        problem: "Claude makes the same mistake twice. You correct it twice. By the third time you're annoyed.",
+        solution: 'At the end of any session where Claude needed correcting, say "update CLAUDE.md with what you learned this session about how I work in this repo."',
+        why: 'CLAUDE.md is loaded into context for every session. A rule written there is a rule Claude reads. The repo gets smarter over time without you doing the writing.',
+        snippet: `"Update CLAUDE.md with these patterns I corrected today:
+- never push migrations without explicit confirmation
+- prefer existing util functions over writing new ones
+- match the existing component file naming pattern"`,
+      },
+      {
+        name: 'Fork Session to Ask Why',
+        problem: 'You see Claude do something surprising. You want to ask why. But asking inside the main session pollutes it with off-topic context.',
+        solution: 'In a new terminal, run `claude --continue --fork`. Same session state but a new session ID. Ask your "why" questions there. Switch to Sonnet to save tokens. Main session stays clean.',
+        why: "The fork keeps full context. Its responses don't bleed back into the main session. You can run a cheaper model for the meta-conversation.",
+        snippet: `# Main session keeps running
+# In a separate terminal:
+claude --continue --fork --model sonnet
+"why did you pick tRPC instead of REST in this scaffold?"`,
+      },
+    ],
+  },
+  {
     issue: 4,
     slug: '1292-sessions-what-the-data-says',
     date: 'March 31, 2026',
