@@ -2,6 +2,181 @@ import { JournalEntry } from '../types/journal';
 
 export const journalEntries: JournalEntry[] = [
   {
+    issue: 6,
+    slug: 'claude-code-week-22-2026',
+    date: 'May 22, 2026',
+    title: 'SKILLS ARE THE NEW PRIMITIVE',
+    subtitle: 'How a three-sentence markdown file beats a custom agent, and the five-tool stack pros now run around Claude Code.',
+    project: 'Field Notes',
+    author: 'Nourin',
+    tags: ['Claude Code', 'Skills', 'Workflow', 'Codex', 'Linear'],
+    tldr: 'A skill is just a markdown file in a folder. That is the whole spec. The shift this week is that the tightest workflows are not bigger agents, they are smaller skills chained together, and most pros now have Codex running alongside Claude Code for second opinions. The recipes at the bottom show the exact files.',
+    sections: [
+      {
+        heading: "WHAT YOU'LL LEARN",
+        paragraphs: [],
+        bullets: [
+          'Skills are .md files in a folder. The folder name becomes the slash command. There is no code, no config, no build step.',
+          "A three-sentence skill can change a session. Matt Pocock's grill-me skill is three sentences and forces 20 to 50 interview questions before any code gets written.",
+          'Run Codex inside Claude Code for adversarial review. Models do not roast their own code well. A second model from a different lab will.',
+          'Persistent state lives in projects, not chats. Cowork projects accumulate context across runs. Each new run builds on the last.',
+          'Playwright CLI beats Playwright MCP. The CLI reads the accessibility tree directly. The MCP screenshots, which is slow and pricey.',
+          'The pro setup is five tools, not one. Linear for tasks, GitHub for branches, Slack for notifications, Claude Code for taste, Codex for output.',
+          'Anthropic shipped 17 official skills. They are on GitHub at anthropics/skills. Cloning the repo and copying the folders to ~/.claude/skills/ is a one-minute install.',
+        ],
+      },
+      {
+        heading: 'WHY THIS MATTERS',
+        paragraphs: [
+          'The model is no longer the bottleneck. Process is.',
+          'The teams shipping fastest right now are the ones who wrote the playbook down as a skill, then made the agent follow it. Vibe coding is over.',
+        ],
+      },
+      {
+        heading: 'A SKILL IS A MARKDOWN FILE. THAT IS THE WHOLE THING.',
+        paragraphs: [
+          'If you have not built a skill yet, here is what one looks like. Three sentences in a file called SKILL.md, inside a folder named after the slash command you want.',
+          'Matt Pocock\'s grill-me skill is exactly this: "Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one by one. And finally, if a question can be answered by exploring the codebase, explore the codebase instead."',
+          'That is the entire skill. The creators using it routinely see 20 to 50 questions before a line of code gets written. Some sessions go 45 minutes of just interview.',
+          'The pattern works because skills do not have to be long, they have to pick the right words at the right moment.',
+          'The folder structure: ~/.claude/skills/grill-me/SKILL.md. That is it. Restart Claude Code and /grill-me shows up in your slash command list.',
+        ],
+      },
+      {
+        heading: 'THE PRD WORKFLOW THAT REPLACES VIBE CODING',
+        paragraphs: [
+          'The pattern that Matt Pocock and Alex Finn both run looks like this. grill-me forces the interview. write-a-prd turns the answers into a GitHub issue. prd-to-issues breaks that issue into vertical slices. Then a Ralph loop walks each slice through TDD.',
+          'Vertical slice is the key term. Instead of building all the backend first and then all the frontend, each issue cuts through every layer for one small feature. You learn faster because each slice is end-to-end.',
+          'If integration fails, you find out on slice one, not slice fifteen. The PRD-to-issues skill also writes the blocking relationships between issues. Issue 3 is blocked by issue 1. Issue 4 is blocked by issue 2.',
+          'Now your background agent can pick up unblocked work in parallel without you babysitting it. The whole sequence runs from inside one session. You grill, you PRD, you slice, you implement.',
+        ],
+      },
+      {
+        heading: 'CODEX IS THE SECOND OPINION CLAUDE CODE NEEDS',
+        paragraphs: [
+          "There is a plugin called codex-plugin-cc that puts OpenAI's Codex inside Claude Code as a slash command. You install it with one marketplace command. You run it with /codex:adversarial-review.",
+          'The pattern works because models go easy on their own code. Opus 4.6 and Sonnet 4.6 will look at code they just wrote and tell you it is fine. A model from another lab does not have that bias.',
+          'There is also /codex:rescue. When Claude Code is going in circles on a hard bug, you hand the task to Codex without leaving your session. You stay inside one tool. The second model picks up where the first got stuck.',
+          'Both Claude Code and Codex have free or low-cost tiers. Even the $7 ChatGPT Go plan unlocks Codex access. Worth setting up just for the review step.',
+        ],
+      },
+      {
+        heading: 'THE FIVE-TOOL STACK PROS ACTUALLY USE',
+        paragraphs: [
+          'The setup that the creators running shipping startups now use looks like this. Linear holds the issues and the kanban board. GitHub stores the code, with every Linear issue auto-creating its own branch. Slack pipes every PR, every commit, every status change into a channel so the team has a paper trail.',
+          'Claude Code and Codex sit on top of all three. Both have official Linear plugins. You install them inside the tool with /plugin. Once they are connected, you can tell either agent "build the issues for this feature in Linear" and it will populate the entire project for you.',
+          'The CLAUDE.md trick that ties it together: add a rule like "for every issue, put it on its own branch." Now the agent does that automatically, every single time, without you asking.',
+          'The whole stack is free at the tier most builders need. Linear has a free tier. GitHub has a free tier. Slack has a free tier. The $7 ChatGPT Go plan covers Codex. Setup time is maybe 30 minutes.',
+        ],
+      },
+      {
+        heading: 'COWORK IS WHERE YOUR WEEKLY WORK GOES NOW',
+        paragraphs: [
+          'There is a third tab in Claude Desktop next to chat and code. It is called Cowork and it is not for developers. It runs your actual files, opens your browser, and ships finished Excel and Word and PowerPoint files, not text you paste into one.',
+          'The setup that the creators using Cowork all converge on: one folder called Cowork Station, three subfolders inside it for context, projects, and output, and three markdown files in the context folder that describe you. aboutme.md is your role and business. brandvoice.md is your tone. workingpreferences.md is how you want documents structured.',
+          'Cowork reads those files at the start of every session. You never re-explain yourself. The output stops feeling generic on run number one.',
+          'The persistence trick is to create a project per recurring workflow. Client deliverables. Weekly reporting. Content production. Each project remembers the previous runs and gets sharper over time.',
+        ],
+      },
+      {
+        heading: 'WHAT TO INSTALL FIRST IF YOU ARE STARTING OVER',
+        paragraphs: [
+          'If I was setting up Claude Code from scratch today, here is what I would install before writing any code:',
+        ],
+        bullets: [
+          'The Anthropic skills repo, cloned and copied into ~/.claude/skills/. Seventeen official skills, including skill-creator, frontend-design, mcp-builder, and webapp-testing. Free.',
+          'The Codex plugin for Claude Code, for adversarial review. Requires a ChatGPT account. Even the Go plan works.',
+          'The Obsidian skills from the Obsidian CEO. Point Claude Code at your vault folder and it becomes a personal knowledge system. Free.',
+          'Playwright CLI. Skip the Playwright MCP. The CLI reads the accessibility tree and is faster and cheaper.',
+          'The skill-creator skill specifically. It benchmarks your custom skills so you know if a new version actually improves output.',
+        ],
+      },
+      {
+        heading: 'WHERE THE CREATORS DISAGREE',
+        paragraphs: [
+          'Two places worth flagging. First, the frontend-design skill that ships in Anthropic\'s official set. One video calls it production-ready. Another calls it "not very good" and recommends awesome-design.md instead, a community skill that templates the design language of sites like Linear, Cohere, and Eleven Labs.',
+          'I have not tested either yet, so I cannot call it. Worth A/B-ing both on the same prompt.',
+          'Second, Playwright CLI vs MCP. The Top10 video is firm that the CLI wins. Better signal because it reads the accessibility tree. Cheaper because no screenshots. Faster because no image processing.',
+          'This matches what I have seen, but the MCP is still what most tutorials recommend. Worth knowing the CLI exists.',
+        ],
+      },
+      {
+        heading: "WHERE I'M LEARNING THIS FROM",
+        paragraphs: [],
+        bullets: [
+          '[LIVE: The greatest Claude Code workflow ever](https://www.youtube.com/watch?v=yoPv_M2A40U) by Alex Finn. The Linear + GitHub + Slack + Claude Code + Codex setup walkthrough.',
+          '[How to Use Claude Cowork](https://www.youtube.com/watch?v=SNo_recKZyY) by AI Master. Cowork tab, context files, projects, and scheduled tasks.',
+          '[Top 10 Claude Code Skills, Plugins and CLIs](https://www.youtube.com/watch?v=KjEFy5wjFQg) by Chase AI. The Codex plugin, Obsidian skills, Playwright CLI, skill-creator.',
+          '[5 Claude Code skills I use every single day](https://www.youtube.com/watch?v=EJyuu6zlQCg) by Matt Pocock. The grill-me, write-a-prd, prd-to-issues, tdd, and improve-codebase-architecture skills.',
+          "[Top 5 Claude Code Skills That Will 10x Your Productivity](https://www.youtube.com/watch?v=Xs942zwWfdY) by Thetips4you. Anthropic's 17 official skills, focused on skill-creator, frontend-design, mcp-builder, claude-api, webapp-testing.",
+        ],
+      },
+    ],
+    recipes: [
+      {
+        name: 'The grill-me skill',
+        problem: 'Claude Code jumps to writing a plan before you have agreed on what the feature actually is. You end up implementing the wrong thing.',
+        solution: 'Create a skill file at ~/.claude/skills/grill-me/SKILL.md with three lines: tell the agent to interview you relentlessly, to walk every branch of the design tree, and to explore the codebase first when the codebase already has the answer.',
+        why: 'Forcing the agent to ask for clarification before writing the plan surfaces requirements you would not have thought to state. The design tree pattern is from Frederick Brooks. The codebase-first rule prevents the agent from asking you things it could check itself.',
+        snippet: `---
+name: grill-me
+description: Interview the user before any design work begins.
+---
+Interview me relentlessly about every aspect of this plan until we
+reach a shared understanding. Walk down each branch of the design
+tree, resolving dependencies between decisions one by one. If a
+question can be answered by exploring the codebase, explore the
+codebase instead.`,
+      },
+      {
+        name: 'Codex adversarial review',
+        problem: 'Claude Code says its own code looks fine because the model is biased toward its own output. Bugs slip through review.',
+        solution: 'Install the Codex plugin for Claude Code. Run /codex:adversarial-review at the end of any feature. The second model has no investment in the first model\'s choices and will find what the first one missed.',
+        why: 'Different training data produces different blind spots. Two labs disagree on idioms, on what counts as defensive code, on what a clean interface looks like. Using both gets you the union of their critiques.',
+        snippet: `# Install once
+/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex
+# Restart, then setup
+/codex setup
+# Use at the end of any feature
+/codex:adversarial-review`,
+      },
+      {
+        name: 'One-issue-one-branch in CLAUDE.md',
+        problem: 'Your agent commits to main, overwrites your edits, or batches multiple unrelated changes into one branch. Pull request reviews become impossible.',
+        solution: 'Add a single line to your project\'s CLAUDE.md file: "For every Linear issue, create a new branch named after the issue and open the pull request against main." The agent will do this automatically from then on.',
+        why: 'CLAUDE.md is loaded into every session. Rules in it are not suggestions, they are defaults. You write the rule once and never enforce it again.',
+      },
+      {
+        name: 'Cowork context folder',
+        problem: "Cowork outputs feel generic. The Excel files don't match your column conventions. The emails don't sound like you.",
+        solution: 'Make a folder called Cowork Station with three subfolders: context, projects, output. Drop three markdown files in context: aboutme.md (role, business, audience), brandvoice.md (tone, words you use and never use), workingpreferences.md (document structure rules, when to ask vs decide).',
+        why: 'Cowork reads the context folder at the start of every session. You stop re-explaining yourself, the agent stops guessing, and the output is shaped before the first prompt.',
+      },
+      {
+        name: 'PRD to vertical slices',
+        problem: "A feature is too big for one issue, but you don't know how to split it. The slices you try come out as horizontal layers, so you can't test anything end-to-end until the very end.",
+        solution: 'Write a skill called prd-to-issues that takes a PRD and breaks it into vertical slices. Each slice must cut through every layer (UI, API, data) for one small piece of the feature. The skill should also write the blocking relationships so agents can pick up unblocked work in parallel.',
+        why: 'Vertical slices flush out integration risk on the first slice instead of the last. If the architecture is wrong, you find out in hours, not weeks. The blocking metadata lets background agents work in parallel safely.',
+      },
+      {
+        name: 'Skill-creator for benchmarking',
+        problem: "You wrote a new skill but you don't know if it actually improves output, or if you are just attached to your own writing.",
+        solution: 'Install the skill-creator plugin from the Anthropic marketplace. Use it to run A/B tests between with-skill and without-skill on the same prompt. Use it again when you edit the skill, to measure if the edit helped.',
+        why: "Skills feel like they help even when they don't. A/B benchmarking is the only honest way to know. Before skill-creator, you had to set this up by hand. Now it is one slash command.",
+        snippet: `/plugin install skill-creator@anthropic-agent-skills
+# Then ask it to test your skill
+/skill-creator benchmark my-skill --against baseline --runs 10`,
+      },
+      {
+        name: 'Cowork scheduled brief',
+        problem: 'You start every morning by reading email, checking calendar, and writing a list of what actually needs your attention. Half an hour of admin before any real work.',
+        solution: 'In Cowork, click schedule, new task. Prompt: "Every weekday at 9am, check Gmail for unread messages from the last 12 hours, check calendar for today\'s events, extract action items and deadlines, save as morningbrief.md in the daily-briefings folder." Save.',
+        why: 'The task runs without you. You wake up to a summary written in your own brand voice (because Cowork read your context files). The half hour comes back.',
+      },
+    ],
+  },
+  {
     issue: 5,
     slug: 'claude-code-week-21-2026',
     date: 'May 22, 2026',
