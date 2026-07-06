@@ -9,7 +9,6 @@ import {
   FileText,
   Link2,
   Plus,
-  Send,
   Play,
   Loader2,
 } from 'lucide-react';
@@ -167,16 +166,6 @@ const PortalPage: React.FC = () => {
     } finally {
       setSaving(false);
     }
-  };
-
-  const sendEmail = () => {
-    if (!portal) return;
-    const lines = subs.map((s) => `- ${s.label ? s.label + ': ' : ''}${s.url}`).join('\n');
-    const subject = `Portal submission — ${portal.clientName}`;
-    const body = `Hi Nourin,\n\nHere are my links:\n\n${lines || '(add your links above first)'}\n\n— ${portal.clientName}`;
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
   };
 
   if (loading) {
@@ -387,13 +376,6 @@ const PortalPage: React.FC = () => {
                   </ul>
                 )}
 
-                <button
-                  onClick={sendEmail}
-                  disabled={subs.length === 0}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-accent-primary hover:bg-accent-secondary text-background font-semibold text-sm px-4 py-2.5 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  <Send size={15} /> Send to Nourin
-                </button>
               </div>
             </div>
           </div>
