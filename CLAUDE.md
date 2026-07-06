@@ -5,6 +5,13 @@
 - Tech stack: React 18 + TypeScript + Vite 5 + Tailwind CSS 3 + Framer Motion
 - Full project structure documented in `PROJECT_STRUCTURE.md`
 
+## Deployment
+- **Deployed from Netlify**, not Vercel. Production URL: **https://nourin.dev**
+- Netlify login is via the **GitHub `NA-E` account**
+- Build + SPA routing config in `netlify.toml` (`npm run build` → `dist`; `/*` → `/index.html` 200)
+- Frontend env vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) must be set in Netlify → Site configuration → Environment variables, then redeploy (Vite bakes them in at build time). Never put the Supabase service_role key in Netlify — it stays local.
+- Client portal links are built from `PORTAL_BASE_URL` in `.env` (set to `https://nourin.dev`) by the `new-portal` script.
+
 ## Component Notes
 - `TestWayOfCode.tsx` is an experimental/test component — keep the file but do NOT render it in App.tsx unless requested
 
@@ -31,7 +38,7 @@
 - Uses `react-router-dom` with `BrowserRouter` in App.tsx
 - Routes: `/` (HomePage) and `/projects/:slug` (ProjectPage)
 - Header/Footer use `handleNavClick` + `useNavigate` for cross-page hash scrolling — navigates to `/` first from detail pages, then smooth-scrolls to section
-- `vercel.json` handles SPA fallback rewrites for production
+- SPA fallback for production handled by `netlify.toml` redirects (`/*` → `/index.html`, 200)
 
 ## Case Study Pages
 - ProjectPage at `src/pages/ProjectPage.tsx`

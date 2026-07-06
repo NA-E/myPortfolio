@@ -1,0 +1,24 @@
+{
+  "clientName": "Sarah",
+  "company": "Acme Co.",
+  "nextStep": "Record a Loom walking through the audit questions below, then drop the link in Files & Links. ~15 min.",
+  "audit": [
+    "What does your current lead flow look like end-to-end?",
+    "Which tasks eat the most of your team's time each week?",
+    "What tools are you using today (CRM, email, scheduling, etc.)?",
+    "Where do leads or clients most often drop off?",
+    "What would \"this worked\" look like 90 days from now?",
+    "Any tools or workflows that are off-limits to change?"
+  ],
+  "docs": [
+    { "label": "Nourin — CV / Resume", "note": "PDF · for your reference", "url": null }
+  ],
+  "calls": [
+    {
+      "name": "Kickoff Call",
+      "date": "2026-06-28",
+      "summary": "Walked through goals, current stack, and the scope of the audit.",
+      "recordingUrl": "https://www.loom.com/"
+    }
+  ]
+}
