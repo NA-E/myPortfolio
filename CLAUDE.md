@@ -7,6 +7,7 @@
 
 ## Deployment
 - **Deployed from Netlify**, not Vercel. Production URL: **https://nourin.dev**
+- **Release via git PR flow, never a direct CLI deploy:** branch → commit → push → open a PR (base `master`) → verify the Netlify deploy preview → merge to `master` → Netlify auto-deploys production. Do NOT run `netlify deploy --prod` to push local files straight to prod.
 - Netlify login is via the **GitHub `NA-E` account**
 - Build + SPA routing config in `netlify.toml` (`npm run build` → `dist`; `/*` → `/index.html` 200)
 - Frontend env vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) must be set in Netlify → Site configuration → Environment variables, then redeploy (Vite bakes them in at build time). Never put the Supabase service_role key in Netlify — it stays local.
