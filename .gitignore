@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Real client input files — keep private, DB is source of truth
+scripts/clients/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local Netlify folder
+.netlify
+
+# Claude Code local tooling
+.claude/launch.json

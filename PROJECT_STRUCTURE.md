@@ -193,11 +193,7 @@ npm run lint     # Run ESLint
 
 ## Contact & Deployment
 
-This portfolio is designed to be deployed on modern hosting platforms like:
-- Vercel
-- Netlify
-- GitHub Pages
-- Any static hosting service
+This portfolio is deployed from **Netlify** (via the GitHub `NA-E` account), with build/redirect config in `netlify.toml`.
 
 Build output is generated in the `dist/` directory after running `npm run build`.
 

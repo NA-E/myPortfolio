@@ -163,15 +163,14 @@ Edit the CSS variables in `src/index.css`:
 
 ## 🚀 Deployment
 
-This project can be deployed to any static hosting service:
-
-- **Netlify**: Drag and drop the `dist` folder
-- **Vercel**: Connect your repository
-- **GitHub Pages**: Upload built files
-- **AWS S3**: Static website hosting
+This site is deployed from **Netlify** (via the GitHub `NA-E` account). Build config lives in `netlify.toml` (`npm run build` → `dist`, plus the SPA redirect).
 
 ### Environment Variables
-No environment variables required for basic functionality.
+Set these in Netlify → Site configuration → Environment variables (required for the client portal):
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (Supabase publishable key)
+
+Never add the Supabase `service_role` key to Netlify — it stays local (used only by `npm run new-portal`).
 
 ## 📄 License
 
