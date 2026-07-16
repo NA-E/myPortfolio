@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { journalEntries } from '../data/journal';
+import { getJournalEntries, getJournalPost } from '../lib/journal';
+import type { JournalEntry } from '../types/journal';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -11,14 +12,36 @@ const fadeIn = {
 
 const JournalPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const entry = journalEntries.find((e) => e.slug === slug);
-  const currentIndex = journalEntries.findIndex((e) => e.slug === slug);
-  const prevEntry = currentIndex < journalEntries.length - 1 ? journalEntries[currentIndex + 1] : null;
-  const nextEntry = currentIndex > 0 ? journalEntries[currentIndex - 1] : null;
+  // undefined = still loading, null = not found
+  const [entry, setEntry] = useState<JournalEntry | null | undefined>(undefined);
+  const [entries, setEntries] = useState<JournalEntry[]>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    let alive = true;
+    setEntry(undefined);
+    Promise.all([getJournalPost(slug ?? ''), getJournalEntries()]).then(([post, list]) => {
+      if (!alive) return;
+      setEntry(post);
+      setEntries(list);
+    });
+    return () => {
+      alive = false;
+    };
   }, [slug]);
+
+  // Prev/next relative to the newest-first list.
+  const currentIndex = entries.findIndex((e) => e.slug === slug);
+  const prevEntry = currentIndex >= 0 && currentIndex < entries.length - 1 ? entries[currentIndex + 1] : null;
+  const nextEntry = currentIndex > 0 ? entries[currentIndex - 1] : null;
+
+  if (entry === undefined) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="font-mono text-sm text-text-secondary">Loading…</p>
+      </div>
+    );
+  }
 
   if (!entry) {
     return (
@@ -118,7 +141,9 @@ const JournalPostPage: React.FC = () => {
           </motion.section>
         ))}
 
-        {/* Divider */}
+        {/* Divider + Recipes — only when the post has recipes (digests won't). */}
+        {entry.recipes.length > 0 && (
+        <>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -190,6 +215,8 @@ const JournalPostPage: React.FC = () => {
             ))}
           </div>
         </motion.section>
+        </>
+        )}
 
         {/* Prev / Next */}
         {(prevEntry || nextEntry) && (

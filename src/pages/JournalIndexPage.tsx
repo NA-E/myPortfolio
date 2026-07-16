@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { journalEntries } from '../data/journal';
+import { getJournalEntries } from '../lib/journal';
+import type { JournalEntry } from '../types/journal';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -10,7 +11,17 @@ const fadeIn = {
 };
 
 const JournalIndexPage: React.FC = () => {
-  const sorted = [...journalEntries].sort((a, b) => b.issue - a.issue);
+  const [sorted, setSorted] = useState<JournalEntry[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    getJournalEntries().then((entries) => {
+      if (alive) setSorted(entries);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen pt-28 pb-20">

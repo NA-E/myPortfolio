@@ -123,3 +123,63 @@ $$;
 grant execute on function get_portal(text)                     to anon, authenticated;
 grant execute on function set_check(text, text, boolean)       to anon, authenticated;
 grant execute on function add_submission(text, text, text)     to anon, authenticated;
+
+-- ============================================================
+--  Journal (blog) schema
+--  The journal moved from the static src/data/journal.ts file into
+--  this table so an automated routine can publish via the MCP server
+--  (service_role key) with no code change or rebuild.
+--
+--  Reads: the browser's anon key can SELECT only PUBLISHED rows.
+--  Writes: only the service_role key (MCP server + seed script),
+--  which bypasses RLS — the anon key can write nothing.
+-- ============================================================
+
+-- One row per journal post. Columns mirror the JournalEntry type
+-- in src/types/journal.ts; the nested shapes live in jsonb.
+create table if not exists journal_posts (
+  id           uuid primary key default gen_random_uuid(),
+  issue        integer unique,                         -- display/sort number; assigned at publish (null while draft)
+  slug         text not null unique,                   -- kebab-case, drives /journal/:slug
+  status       text not null default 'draft'
+                 check (status in ('draft', 'published')),
+  date         text not null,                          -- human display date, e.g. "July 5, 2026"
+  title        text not null,
+  subtitle     text not null,
+  project      text not null default 'Field Notes',    -- e.g. "Field Notes" | "Daily Digest"
+  author       text,
+  tags         jsonb not null default '[]'::jsonb,      -- string[]
+  tldr         text not null,
+  sections     jsonb not null default '[]'::jsonb,      -- [{ heading, paragraphs[], bullets?[] }]
+  recipes      jsonb not null default '[]'::jsonb,      -- [{ name, problem, solution, why, snippet? }]
+  created_at   timestamptz not null default now(),
+  updated_at   timestamptz not null default now(),
+  published_at timestamptz                              -- set when status flips to 'published'
+);
+
+create index if not exists journal_posts_published_idx
+  on journal_posts (issue desc)
+  where status = 'published';
+
+create or replace function journal_touch_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+drop trigger if exists journal_posts_touch on journal_posts;
+create trigger journal_posts_touch
+  before update on journal_posts
+  for each row execute function journal_touch_updated_at();
+
+alter table journal_posts enable row level security;
+
+drop policy if exists journal_public_read on journal_posts;
+create policy journal_public_read on journal_posts
+  for select
+  to anon, authenticated
+  using (status = 'published');
