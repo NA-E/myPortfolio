@@ -1,59 +1,63 @@
 # Project Instructions
 
+Portfolio site for Nourin Ahmed. React 18 + TypeScript + Vite 5 + Tailwind 3 + Framer Motion. Full file map in `PROJECT_STRUCTURE.md`.
+
 ## Development
 - Dev server: `npm run dev` → http://localhost:5173/
-- Tech stack: React 18 + TypeScript + Vite 5 + Tailwind CSS 3 + Framer Motion
-- Full project structure documented in `PROJECT_STRUCTURE.md`
+- Build: `npm run build` → `dist`
+- Node/tooling note: on this machine `node`/`npm` live at `C:\Program Files\nodejs`; `supabase` CLI at `C:\Users\nourinahmedeka\tools\supabase`.
 
 ## Deployment
-- **Deployed from Netlify**, not Vercel. Production URL: **https://nourin.dev**
-- **Release via git PR flow, never a direct CLI deploy:** branch → commit → push → open a PR (base `master`) → verify the Netlify deploy preview → merge to `master` → Netlify auto-deploys production. Do NOT run `netlify deploy --prod` to push local files straight to prod.
-- Netlify login is via the **GitHub `NA-E` account**
-- Build + SPA routing config in `netlify.toml` (`npm run build` → `dist`; `/*` → `/index.html` 200)
-- Frontend env vars (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) must be set in Netlify → Site configuration → Environment variables, then redeploy (Vite bakes them in at build time). Never put the Supabase service_role key in Netlify — it stays local.
-- Client portal links are built from `PORTAL_BASE_URL` in `.env` (set to `https://nourin.dev`) by the `new-portal` script.
+- **Deployed from Netlify** (not Vercel). Production URL: **https://nourin.dev**. Login via the **GitHub `NA-E` account**.
+- **Release via git PR flow, never a direct CLI deploy:** branch → commit → push → open PR (base `master`) → verify Netlify deploy preview → merge to `master` → Netlify auto-deploys. Do NOT `netlify deploy --prod` local files straight to prod.
+- Build + SPA routing in `netlify.toml` (`/*` → `/index.html` 200).
 
-## Component Notes
-- `TestWayOfCode.tsx` is an experimental/test component — keep the file but do NOT render it in App.tsx unless requested
+## Backend (Supabase)
+- One Supabase project (ref `byuurzplviycqupsutmt`) backs two features: the client portal and the journal.
+- **Keys:** `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` are public (Netlify env → baked in at build). The **service_role key is secret**: it stays in local `.env` and as a Supabase Edge Function secret — **never** in Netlify.
+- SQL lives in `supabase/migrations/` and the consolidated `supabase/schema.sql` (run-once in the SQL Editor).
 
-## Positioning
-- Nourin is an **AI Product Engineer** — never use "Automation Engineer"
-- Page title: "Nourin Ahmed | AI Product Engineer"
-- Hero subtitle: "AI Product Engineer" (gradient text, standalone — no suffix)
-- Hero headline: "YOU KNOW IT CAN BE DONE. I MAKE IT WORK." — targets clients who tried AI tools, know it's possible, but can't get to production
-- Contact email: ekanourin@gmail.com
+### Client portal
+- Route `/portal/:token` (own slim chrome, no marketing Header/Footer).
+- Table `portals` + RPCs `get_portal` / `set_check` / `add_submission` (token is the only credential; RLS locks direct access).
+- Create/update a portal: `npm run new-portal [path/to/client.json]` (uses service_role key locally). Links built from `PORTAL_BASE_URL` in `.env`.
 
-## Font Stack
-- Press Start 2P → headings (via `font-pixel` class)
-- Inter → body text (via `font-sans` class)
-- JetBrains Mono → terminal/mono elements (via `font-mono` class)
-
-## Design Notes
-- Heading glow is intentionally muted (2 layers, low opacity) — don't revert to bright neon
-- Terminal card: uses `whoami` command, macOS chrome (colored dots + title bar), blinking cursor, stretches to match left column height — NO floating icons beside it
-- Services section: 4 cards in 2×2 grid (`md:grid-cols-2`), no "Learn More" buttons. First card is "CUSTOM SOFTWARE DEVELOPMENT"
-- About section tech tags: Claude Code, Lovable, N8N, Bolt, Replit, AI Automation, AI Agents, Workflow Automation
-- About section "Over the last few years" content is bullet points (not prose)
+### Journal (blog) + auto-publishing pipeline
+- Routes `/journal` and `/journal/:slug`.
+- Posts live in the Supabase `journal_posts` table. Frontend reads them via `src/lib/journal.ts` (anon key). `src/data/journal.ts` is the **offline fallback + migration seed** — keep it.
+- Seed/migrate the static posts into the table: `npm run seed-journal`.
+- **Two post types** (the `project` field distinguishes): weekly **"Field Notes"** (has recipes) and daily **"Daily Digest"** (auto-published, usually no recipes). The RECIPES block auto-hides when `recipes` is empty.
+- **Auto-publishing:** a scheduled **Claude.ai routine** (repo `NA-E/claude_code_daily_learning`) generates a daily digest and publishes an on-brand version by calling the **`journal-mcp` MCP server** — a Supabase Edge Function at `supabase/functions/journal-mcp/`. Instant publish, no rebuild.
+  - Tools: `get_style_guide`, `get_examples`, `suggest_next_issue`, `create_draft`, `check_draft`, `publish_post`, `list_posts`, `get_post`, `update_post`, `unpublish_post`.
+  - **On-brand voice** is defined in `supabase/functions/journal-mcp/brand.ts` (style guide + reference digests + rubric). To change how future posts read, edit `brand.ts` and redeploy.
+  - Deploy: `supabase functions deploy journal-mcp --no-verify-jwt`. Secrets: `JOURNAL_MCP_TOKEN` (bearer) + `JOURNAL_BASE_URL`; `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` auto-injected.
+  - The routine reaches it via a committed `.mcp.json` in that repo (MCP is the only network path a routine sandbox has — Bash can only reach github.com). Setup files in `supabase/functions/journal-mcp/routine-setup/` + `README.md`.
 
 ## Routing & Navigation
-- Uses `react-router-dom` with `BrowserRouter` in App.tsx
-- Routes: `/` (HomePage) and `/projects/:slug` (ProjectPage)
-- Header/Footer use `handleNavClick` + `useNavigate` for cross-page hash scrolling — navigates to `/` first from detail pages, then smooth-scrolls to section
-- SPA fallback for production handled by `netlify.toml` redirects (`/*` → `/index.html`, 200)
+- `react-router-dom` + `BrowserRouter` in `App.tsx`.
+- Routes: `/` (HomePage), `/projects/:slug` (ProjectPage), `/journal` + `/journal/:slug`, `/portal/:token`.
+- Header/Footer use `handleNavClick` + `useNavigate` for cross-page hash scrolling (navigate to `/` first from detail pages, then smooth-scroll).
 
-## Case Study Pages
-- ProjectPage at `src/pages/ProjectPage.tsx`
-- Sections: header → optional video embed → What It Does → The Problem → The Solution → Tech Stack → Key Features → Results → Client Feedback → CTA
-- Max width 800px, Framer Motion `whileInView` fade-in for each section
-- Testimonial frame supports either screenshot image OR text quote
+## Positioning
+- Nourin is an **AI Product Engineer** — never "Automation Engineer".
+- Page title: "Nourin Ahmed | AI Product Engineer".
+- Hero subtitle: "AI Product Engineer" (gradient text, standalone — no suffix).
+- Hero headline: "YOU KNOW IT CAN BE DONE. I MAKE IT WORK." — targets clients who tried AI tools, know it's possible, but can't reach production.
+- Contact email: ekanourin@gmail.com.
 
-## Project Data
-- 6 real projects in `src/data/projects.ts` — Leadflow, Gemini Analysis, Scriptwriter Agent, Meta Ads MCP, Newsletter Agent, Serenova Home
-- No client names in copy — business-outcome focused, non-technical language
-- Images are stock photos with TODO comments — replace with real screenshots
-- Portfolio grid: 6 cards in `md:grid-cols-3` (2 clean rows)
+## Design System
+- **Fonts:** Press Start 2P → headings (`font-pixel`); Inter → body (`font-sans`); JetBrains Mono → terminal/mono (`font-mono`).
+- Heading glow is intentionally muted (2 layers, low opacity) — don't revert to bright neon.
+- Terminal card: `whoami` command, macOS chrome (colored dots + title bar), blinking cursor, stretches to match left column height — NO floating icons beside it.
+- Services section: 4 cards in 2×2 grid (`md:grid-cols-2`), no "Learn More" buttons. First card is "CUSTOM SOFTWARE DEVELOPMENT".
+- About section tech tags: Claude Code, Lovable, N8N, Bolt, Replit, AI Automation, AI Agents, Workflow Automation. "Over the last few years" content is bullet points (not prose).
+
+## Content
+- **Projects:** 6 real projects in `src/data/projects.ts` (Leadflow, Gemini Analysis, Scriptwriter Agent, Meta Ads MCP, Newsletter Agent, Serenova Home). No client names — business-outcome focused, non-technical. Images are stock with TODO comments. Grid: 6 cards `md:grid-cols-3`.
+- **Case studies:** `src/pages/ProjectPage.tsx`. Sections: header → optional video → What It Does → The Problem → The Solution → Tech Stack → Key Features → Results → Client Feedback → CTA. Max width 800px, `whileInView` fade-in. Testimonial frame supports screenshot image OR text quote.
 
 ## Patterns & Gotchas
-- Hover effects: Avoid combining framer-motion `whileHover` with `react-tilt` — use CSS transitions instead to prevent visual conflicts
-- Card overlays: Don't use `absolute inset-0` overlays on hover that cover images — causes "black card" effect
-- Use standard hyphen `-` not non-breaking hyphen `‑` in pixel font headings (renders poorly in Press Start 2P)
+- `TestWayOfCode.tsx` is experimental — keep the file, do NOT render it in `App.tsx` unless requested.
+- Hover: don't combine framer-motion `whileHover` with `react-tilt` — use CSS transitions (prevents visual conflicts).
+- Don't put `absolute inset-0` hover overlays over images — causes a "black card" effect.
+- Use a standard hyphen `-`, not a non-breaking hyphen `‑`, in pixel-font headings (renders poorly in Press Start 2P).
