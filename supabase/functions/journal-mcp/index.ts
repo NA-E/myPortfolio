@@ -18,12 +18,23 @@ const httpHandler = transport.bind(mcp);
 
 const app = new Hono();
 
-// App-layer auth: constant-time-ish check of the bearer token on every request.
+// App-layer auth. The token may arrive two ways:
+//   1. Authorization: Bearer <token>  — used by the repo-committed .mcp.json
+//      (local dev + anything that can set headers).
+//   2. A path segment: .../journal-mcp/<token>/mcp  — used by Claude.ai custom
+//      connectors, whose UI only offers OAuth, no custom-header field. The
+//      connector sends the URL, so the token rides in the path.
+// Trade-off: a path token can appear in request logs where a header would not.
+// It is a single, rotatable secret for this one server, so the exposure is low.
 app.use("*", async (c, next) => {
   if (!AUTH_TOKEN) return c.json({ error: "server misconfigured: JOURNAL_MCP_TOKEN unset" }, 500);
   const header = c.req.header("Authorization") ?? "";
-  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
-  if (token !== AUTH_TOKEN) return c.json({ error: "unauthorized" }, 401);
+  const headerToken = header.startsWith("Bearer ") ? header.slice(7) : "";
+  const pathSegments = new URL(c.req.url).pathname.split("/").filter(Boolean);
+  const pathHasToken = pathSegments.includes(AUTH_TOKEN);
+  if (headerToken !== AUTH_TOKEN && !pathHasToken) {
+    return c.json({ error: "unauthorized" }, 401);
+  }
   await next();
 });
 

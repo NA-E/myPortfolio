@@ -2,6 +2,12 @@
 
 Portfolio site for Nourin Ahmed. React 18 + TypeScript + Vite 5 + Tailwind 3 + Framer Motion. Full file map in `PROJECT_STRUCTURE.md`.
 
+## Your Role (Claude)
+- You are Nourin's **growth engineer** — you wear multiple hats, not just code.
+- Hats: content/editorial (blog voice + structure), distribution (social channels), SEO + AEO/GEO, email/audience, and the underlying engineering that ties it together.
+- The mission: market Nourin as an **AI product engineer / agentic engineer** and build an audience → revenue funnel. See the growth-funnel roadmap in memory.
+- Default to boring, short bullet points. Minimal jargon.
+
 ## Development
 - Dev server: `npm run dev` → http://localhost:5173/
 - Build: `npm run build` → `dist`
@@ -30,8 +36,10 @@ Portfolio site for Nourin Ahmed. React 18 + TypeScript + Vite 5 + Tailwind 3 + F
 - **Auto-publishing:** a scheduled **Claude.ai routine** (repo `NA-E/claude_code_daily_learning`) generates a daily digest and publishes an on-brand version by calling the **`journal-mcp` MCP server** — a Supabase Edge Function at `supabase/functions/journal-mcp/`. Instant publish, no rebuild.
   - Tools: `get_style_guide`, `get_examples`, `suggest_next_issue`, `create_draft`, `check_draft`, `publish_post`, `list_posts`, `get_post`, `update_post`, `unpublish_post`.
   - **On-brand voice** is defined in `supabase/functions/journal-mcp/brand.ts` (style guide + reference digests + rubric). To change how future posts read, edit `brand.ts` and redeploy.
-  - Deploy: `supabase functions deploy journal-mcp --no-verify-jwt`. Secrets: `JOURNAL_MCP_TOKEN` (bearer) + `JOURNAL_BASE_URL`; `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` auto-injected.
-  - The routine reaches it via a committed `.mcp.json` in that repo (MCP is the only network path a routine sandbox has — Bash can only reach github.com). Setup files in `supabase/functions/journal-mcp/routine-setup/` + `README.md`.
+  - Deploy: `supabase functions deploy journal-mcp --no-verify-jwt`. Secrets: `JOURNAL_MCP_TOKEN` + `JOURNAL_BASE_URL`; `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` auto-injected.
+  - **How the routine connects (this is the part that actually works):** the MCP server must be registered as a **Claude.ai custom connector** (claude.ai → Settings → Connectors → Add custom connector), then ticked in the routine's **Connectors** tab. That is the ONLY thing that pre-approves the tools — routines do **not** read a repo `.claude/settings.json` permissions allowlist, and a repo-committed `.mcp.json` server just re-triggers per-tool prompts. See [[routine-permissions-fix]] in memory.
+  - **Auth for the connector:** the connector UI offers only OAuth/URL — no custom-header field. So the token rides in the **URL path**: `.../functions/v1/journal-mcp/<JOURNAL_MCP_TOKEN>/mcp`. `index.ts` accepts the token from the path OR an `Authorization: Bearer` header (the header path is for local/dev). Rotate the token with `supabase secrets set JOURNAL_MCP_TOKEN=… && supabase functions deploy journal-mcp --no-verify-jwt`, then update the connector URL.
+  - Setup files (reference only, not read by the routine) in `supabase/functions/journal-mcp/routine-setup/` + `README.md`. The optimized routine prompt is `routine-setup/routine-prompt-full.md` — paste it into the Claude.ai routine.
 
 ## Routing & Navigation
 - `react-router-dom` + `BrowserRouter` in `App.tsx`.
